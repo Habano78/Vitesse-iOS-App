@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2262A3E22E128B17001BFB18 /* VitesseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A3E12E128B17001BFB18 /* VitesseApp.swift */; };
+		2262A4102E129035001BFB18 /* DTOsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A40F2E129035001BFB18 /* DTOsModels.swift */; };
+		2262A4122E129056001BFB18 /* BusinessModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4112E129056001BFB18 /* BusinessModels.swift */; };
+		2262A4142E133570001BFB18 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4132E133570001BFB18 /* APIService.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		2262A3EF2E128B19001BFB18 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -25,8 +32,12 @@
 
 /* Begin PBXFileReference section */
 		2262A3DE2E128B17001BFB18 /* Vitesse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vitesse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2262A3E12E128B17001BFB18 /* VitesseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitesseApp.swift; sourceTree = "<group>"; };
 		2262A3EE2E128B19001BFB18 /* VitesseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitesseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2262A3F82E128B19001BFB18 /* VitesseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitesseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2262A40F2E129035001BFB18 /* DTOsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTOsModels.swift; sourceTree = "<group>"; };
+		2262A4112E129056001BFB18 /* BusinessModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessModels.swift; sourceTree = "<group>"; };
+		2262A4132E133570001BFB18 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +86,11 @@
 		2262A3D52E128B17001BFB18 = {
 			isa = PBXGroup;
 			children = (
+				2262A3E12E128B17001BFB18 /* VitesseApp.swift */,
+				2262A40E2E129008001BFB18 /* Outils */,
+				2262A40D2E128FFC001BFB18 /* Services */,
+				2262A40C2E128FF3001BFB18 /* ViewModels */,
+				2262A40B2E128FEA001BFB18 /* Models */,
 				2262A3E02E128B17001BFB18 /* Vitesse */,
 				2262A3F12E128B19001BFB18 /* VitesseTests */,
 				2262A3FB2E128B19001BFB18 /* VitesseUITests */,
@@ -90,6 +106,37 @@
 				2262A3F82E128B19001BFB18 /* VitesseUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		2262A40B2E128FEA001BFB18 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2262A40F2E129035001BFB18 /* DTOsModels.swift */,
+				2262A4112E129056001BFB18 /* BusinessModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		2262A40C2E128FF3001BFB18 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		2262A40D2E128FFC001BFB18 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				2262A4132E133570001BFB18 /* APIService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		2262A40E2E129008001BFB18 /* Outils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Outils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,6 +283,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2262A4102E129035001BFB18 /* DTOsModels.swift in Sources */,
+				2262A4142E133570001BFB18 /* APIService.swift in Sources */,
+				2262A3E22E128B17001BFB18 /* VitesseApp.swift in Sources */,
+				2262A4122E129056001BFB18 /* BusinessModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
