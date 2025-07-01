@@ -10,7 +10,10 @@
 		2262A3E22E128B17001BFB18 /* VitesseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A3E12E128B17001BFB18 /* VitesseApp.swift */; };
 		2262A4102E129035001BFB18 /* DTOsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A40F2E129035001BFB18 /* DTOsModels.swift */; };
 		2262A4122E129056001BFB18 /* BusinessModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4112E129056001BFB18 /* BusinessModels.swift */; };
-		2262A4142E133570001BFB18 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4132E133570001BFB18 /* APIService.swift */; };
+		2262A4142E133570001BFB18 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4132E133570001BFB18 /* AuthService.swift */; };
+		2262A4162E13CAAE001BFB18 /* URLSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4152E13CAAD001BFB18 /* URLSessionProtocol.swift */; };
+		2262A4182E13CBEB001BFB18 /* Errors_Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4172E13CBEB001BFB18 /* Errors_Service.swift */; };
+		2262A41A2E13CEC0001BFB18 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4192E13CEC0001BFB18 /* AuthViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +40,10 @@
 		2262A3F82E128B19001BFB18 /* VitesseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitesseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2262A40F2E129035001BFB18 /* DTOsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTOsModels.swift; sourceTree = "<group>"; };
 		2262A4112E129056001BFB18 /* BusinessModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessModels.swift; sourceTree = "<group>"; };
-		2262A4132E133570001BFB18 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		2262A4132E133570001BFB18 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		2262A4152E13CAAD001BFB18 /* URLSessionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionProtocol.swift; sourceTree = "<group>"; };
+		2262A4172E13CBEB001BFB18 /* Errors_Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors_Service.swift; sourceTree = "<group>"; };
+		2262A4192E13CEC0001BFB18 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -87,10 +93,10 @@
 			isa = PBXGroup;
 			children = (
 				2262A3E12E128B17001BFB18 /* VitesseApp.swift */,
-				2262A40E2E129008001BFB18 /* Outils */,
-				2262A40D2E128FFC001BFB18 /* Services */,
-				2262A40C2E128FF3001BFB18 /* ViewModels */,
 				2262A40B2E128FEA001BFB18 /* Models */,
+				2262A40C2E128FF3001BFB18 /* ViewModels */,
+				2262A40D2E128FFC001BFB18 /* Services */,
+				2262A40E2E129008001BFB18 /* Outils */,
 				2262A3E02E128B17001BFB18 /* Vitesse */,
 				2262A3F12E128B19001BFB18 /* VitesseTests */,
 				2262A3FB2E128B19001BFB18 /* VitesseUITests */,
@@ -120,6 +126,7 @@
 		2262A40C2E128FF3001BFB18 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				2262A4192E13CEC0001BFB18 /* AuthViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -127,7 +134,8 @@
 		2262A40D2E128FFC001BFB18 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				2262A4132E133570001BFB18 /* APIService.swift */,
+				2262A4132E133570001BFB18 /* AuthService.swift */,
+				2262A4172E13CBEB001BFB18 /* Errors_Service.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -135,6 +143,7 @@
 		2262A40E2E129008001BFB18 /* Outils */ = {
 			isa = PBXGroup;
 			children = (
+				2262A4152E13CAAD001BFB18 /* URLSessionProtocol.swift */,
 			);
 			path = Outils;
 			sourceTree = "<group>";
@@ -283,8 +292,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2262A4182E13CBEB001BFB18 /* Errors_Service.swift in Sources */,
+				2262A4162E13CAAE001BFB18 /* URLSessionProtocol.swift in Sources */,
 				2262A4102E129035001BFB18 /* DTOsModels.swift in Sources */,
-				2262A4142E133570001BFB18 /* APIService.swift in Sources */,
+				2262A4142E133570001BFB18 /* AuthService.swift in Sources */,
+				2262A41A2E13CEC0001BFB18 /* AuthViewModel.swift in Sources */,
 				2262A3E22E128B17001BFB18 /* VitesseApp.swift in Sources */,
 				2262A4122E129056001BFB18 /* BusinessModels.swift in Sources */,
 			);
