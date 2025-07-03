@@ -9,7 +9,7 @@ import Foundation
 
 // Envoyer le corps de la requête pour l'authentification(POST /user/auth)
 struct AuthRequestDTO: Codable {
-        let username: String
+        let email: String
         let password: String
 }
 

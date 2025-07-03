@@ -4,7 +4,6 @@
 //
 //  Created by Perez William on 30/06/2025.
 //
-
 import Foundation
 
 // MARK: - Authentication Service Protocol
@@ -16,42 +15,40 @@ protocol AuthenticationServiceProtocol {
 // MARK: - Authentication Service Implementation
 class AuthService: AuthenticationServiceProtocol {
         
-        // MARK: - Properties
-        
+        // MARK: - Properties et dépendances
         private nonisolated let urlSession: URLSessionProtocol
+        private let tokenManager: AuthTokenPersistenceProtocol
         
-        private let jsonEncoder: JSONEncoder
         private let jsonDecoder: JSONDecoder
+        private let jsonEncoder: JSONEncoder
         
         private let baseURL = URL(string: "http://127.0.0.1:8080")!
         
-        // MARK: - Initialization
-        
-        init(urlSession: URLSessionProtocol = URLSession.shared) {
+        // MARK: - Init
+        init(
+                urlSession: URLSessionProtocol = URLSession.shared,
+                tokenManager: AuthTokenPersistenceProtocol = AuthTokenPersistence()
+        ) {
                 self.urlSession = urlSession
+                self.tokenManager = tokenManager
                 self.jsonEncoder = JSONEncoder()
                 self.jsonDecoder = JSONDecoder()
         }
         
-        // MARK: - AuthenticationServiceProtocol Conformance
-        
+        // MARK: - Authentication
         func login(credentials: AuthRequestDTO) async throws -> AuthResponseDTO {
-                // Construction du endpoint(URL)
+                // ... (votre code existant pour le login reste ici, inchangé)
                 let endpointURL = baseURL.appendingPathComponent("user/auth")
-                
-                // Création et configuration de la requête 
                 var request = URLRequest(url: endpointURL)
                 request.httpMethod = "POST"
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 
-                // 3. Essayer d'encoder le corps de la requête.
                 do {
                         request.httpBody = try jsonEncoder.encode(credentials)
                 } catch {
                         throw APIServiceError.requestEncodingFailed(error)
                 }
                 
-                // 4. Exécuter l'appel réseau
                 let data: Data
                 let response: URLResponse
                 
@@ -61,9 +58,8 @@ class AuthService: AuthenticationServiceProtocol {
                         throw APIServiceError.networkError(error)
                 }
                 
-                // 5. Valider la réponse HTTP
                 guard let httpResponse = response as? HTTPURLResponse else {
-                        throw APIServiceError.unexpectedStatusCode(-1) // Cas improbable
+                        throw APIServiceError.unexpectedStatusCode(-1)
                 }
                 
                 guard httpResponse.statusCode != 401 && httpResponse.statusCode != 403 else {
@@ -74,7 +70,6 @@ class AuthService: AuthenticationServiceProtocol {
                         throw APIServiceError.unexpectedStatusCode(httpResponse.statusCode)
                 }
                 
-                // 6. Décoder la réponse JSON
                 do {
                         let authResponse = try jsonDecoder.decode(AuthResponseDTO.self, from: data)
                         return authResponse
@@ -83,3 +78,4 @@ class AuthService: AuthenticationServiceProtocol {
                 }
         }
 }
+

@@ -10,7 +10,7 @@ import Foundation
 @MainActor
 class AuthViewModel: ObservableObject {
         
-        @Published var username: String = ""
+        @Published var email: String = ""
         @Published var password: String = ""
         
         //MARK: État initial pour la Vue
@@ -24,17 +24,17 @@ class AuthViewModel: ObservableObject {
         let onLoginSucceed: ((AuthResponseDTO) -> Void)
         
         init(authService: AuthenticationServiceProtocol, onLoginSucceed: @escaping (AuthResponseDTO) -> Void) {
-                self.authService = authService /// asignation du nouveau service passé en paramètre
+                self.authService = authService 
                 self.onLoginSucceed = onLoginSucceed
         }
         
         func login() async {
-                isLoading = true
+                self.isLoading = true
                 defer { isLoading = false }
-                errorMessage = nil
+                self.errorMessage = nil
                 
                 //MARK: Préparation des données pour la requête
-                let  loginCredentials  = AuthRequestDTO(username: self.username, password: self.password)
+                let  loginCredentials  = AuthRequestDTO(email: self.email, password: self.password)
                 
                 //MARK: Appel au Service et gérer la réponse
                 do {

@@ -10,10 +10,20 @@
 		2262A3E22E128B17001BFB18 /* VitesseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A3E12E128B17001BFB18 /* VitesseApp.swift */; };
 		2262A4102E129035001BFB18 /* DTOsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A40F2E129035001BFB18 /* DTOsModels.swift */; };
 		2262A4122E129056001BFB18 /* BusinessModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4112E129056001BFB18 /* BusinessModels.swift */; };
-		2262A4142E133570001BFB18 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4132E133570001BFB18 /* AuthService.swift */; };
+		2262A4142E133570001BFB18 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4132E133570001BFB18 /* AuthenticationService.swift */; };
 		2262A4162E13CAAE001BFB18 /* URLSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4152E13CAAD001BFB18 /* URLSessionProtocol.swift */; };
 		2262A4182E13CBEB001BFB18 /* Errors_Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4172E13CBEB001BFB18 /* Errors_Service.swift */; };
-		2262A41A2E13CEC0001BFB18 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4192E13CEC0001BFB18 /* AuthViewModel.swift */; };
+		2262A41A2E13CEC0001BFB18 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4192E13CEC0001BFB18 /* AuthenticationViewModel.swift */; };
+		2262A41D2E13D25E001BFB18 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A41C2E13D25E001BFB18 /* AuthenticationView.swift */; };
+		2262A41F2E13D712001BFB18 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A41E2E13D712001BFB18 /* ViewExtension.swift */; };
+		2262A4222E14268F001BFB18 /* KeyChainInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4212E14268F001BFB18 /* KeyChainInterface.swift */; };
+		2262A4242E1426DE001BFB18 /* AuthTokenPersistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4232E1426DE001BFB18 /* AuthTokenPersistance.swift */; };
+		2262A4262E14270F001BFB18 /* AuthTokenPersistanceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4252E14270F001BFB18 /* AuthTokenPersistanceProtocol.swift */; };
+		2262A4282E143C67001BFB18 /* CandidateListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4272E143C67001BFB18 /* CandidateListViewModel.swift */; };
+		2262A42A2E144BAD001BFB18 /* CandidateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4292E144BAD001BFB18 /* CandidateListView.swift */; };
+		2262A42C2E146248001BFB18 /* CandidateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A42B2E146248001BFB18 /* CandidateService.swift */; };
+		2262A4352E1550B3001BFB18 /* CandidateDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4342E1550B3001BFB18 /* CandidateDetailViewModel.swift */; };
+		2262A4372E1558B2001BFB18 /* CandidateDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4362E1558B2001BFB18 /* CandidateDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,10 +50,20 @@
 		2262A3F82E128B19001BFB18 /* VitesseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitesseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2262A40F2E129035001BFB18 /* DTOsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTOsModels.swift; sourceTree = "<group>"; };
 		2262A4112E129056001BFB18 /* BusinessModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessModels.swift; sourceTree = "<group>"; };
-		2262A4132E133570001BFB18 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		2262A4132E133570001BFB18 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		2262A4152E13CAAD001BFB18 /* URLSessionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionProtocol.swift; sourceTree = "<group>"; };
 		2262A4172E13CBEB001BFB18 /* Errors_Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors_Service.swift; sourceTree = "<group>"; };
-		2262A4192E13CEC0001BFB18 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		2262A4192E13CEC0001BFB18 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
+		2262A41C2E13D25E001BFB18 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
+		2262A41E2E13D712001BFB18 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
+		2262A4212E14268F001BFB18 /* KeyChainInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainInterface.swift; sourceTree = "<group>"; };
+		2262A4232E1426DE001BFB18 /* AuthTokenPersistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenPersistance.swift; sourceTree = "<group>"; };
+		2262A4252E14270F001BFB18 /* AuthTokenPersistanceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenPersistanceProtocol.swift; sourceTree = "<group>"; };
+		2262A4272E143C67001BFB18 /* CandidateListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandidateListViewModel.swift; sourceTree = "<group>"; };
+		2262A4292E144BAD001BFB18 /* CandidateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandidateListView.swift; sourceTree = "<group>"; };
+		2262A42B2E146248001BFB18 /* CandidateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandidateService.swift; sourceTree = "<group>"; };
+		2262A4342E1550B3001BFB18 /* CandidateDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandidateDetailViewModel.swift; sourceTree = "<group>"; };
+		2262A4362E1558B2001BFB18 /* CandidateDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandidateDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -95,7 +115,9 @@
 				2262A3E12E128B17001BFB18 /* VitesseApp.swift */,
 				2262A40B2E128FEA001BFB18 /* Models */,
 				2262A40C2E128FF3001BFB18 /* ViewModels */,
+				2262A41B2E13D23F001BFB18 /* Views */,
 				2262A40D2E128FFC001BFB18 /* Services */,
+				2262A4202E142608001BFB18 /* PersistanceSecure */,
 				2262A40E2E129008001BFB18 /* Outils */,
 				2262A3E02E128B17001BFB18 /* Vitesse */,
 				2262A3F12E128B19001BFB18 /* VitesseTests */,
@@ -126,7 +148,9 @@
 		2262A40C2E128FF3001BFB18 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				2262A4192E13CEC0001BFB18 /* AuthViewModel.swift */,
+				2262A4192E13CEC0001BFB18 /* AuthenticationViewModel.swift */,
+				2262A4272E143C67001BFB18 /* CandidateListViewModel.swift */,
+				2262A4342E1550B3001BFB18 /* CandidateDetailViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -134,7 +158,8 @@
 		2262A40D2E128FFC001BFB18 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				2262A4132E133570001BFB18 /* AuthService.swift */,
+				2262A4132E133570001BFB18 /* AuthenticationService.swift */,
+				2262A42B2E146248001BFB18 /* CandidateService.swift */,
 				2262A4172E13CBEB001BFB18 /* Errors_Service.swift */,
 			);
 			path = Services;
@@ -144,8 +169,29 @@
 			isa = PBXGroup;
 			children = (
 				2262A4152E13CAAD001BFB18 /* URLSessionProtocol.swift */,
+				2262A41E2E13D712001BFB18 /* ViewExtension.swift */,
 			);
 			path = Outils;
+			sourceTree = "<group>";
+		};
+		2262A41B2E13D23F001BFB18 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2262A41C2E13D25E001BFB18 /* AuthenticationView.swift */,
+				2262A4292E144BAD001BFB18 /* CandidateListView.swift */,
+				2262A4362E1558B2001BFB18 /* CandidateDetailView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2262A4202E142608001BFB18 /* PersistanceSecure */ = {
+			isa = PBXGroup;
+			children = (
+				2262A4212E14268F001BFB18 /* KeyChainInterface.swift */,
+				2262A4232E1426DE001BFB18 /* AuthTokenPersistance.swift */,
+				2262A4252E14270F001BFB18 /* AuthTokenPersistanceProtocol.swift */,
+			);
+			path = PersistanceSecure;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,11 +340,21 @@
 			files = (
 				2262A4182E13CBEB001BFB18 /* Errors_Service.swift in Sources */,
 				2262A4162E13CAAE001BFB18 /* URLSessionProtocol.swift in Sources */,
+				2262A4262E14270F001BFB18 /* AuthTokenPersistanceProtocol.swift in Sources */,
+				2262A42C2E146248001BFB18 /* CandidateService.swift in Sources */,
 				2262A4102E129035001BFB18 /* DTOsModels.swift in Sources */,
-				2262A4142E133570001BFB18 /* AuthService.swift in Sources */,
-				2262A41A2E13CEC0001BFB18 /* AuthViewModel.swift in Sources */,
+				2262A4142E133570001BFB18 /* AuthenticationService.swift in Sources */,
+				2262A42A2E144BAD001BFB18 /* CandidateListView.swift in Sources */,
+				2262A4352E1550B3001BFB18 /* CandidateDetailViewModel.swift in Sources */,
+				2262A41F2E13D712001BFB18 /* ViewExtension.swift in Sources */,
+				2262A4242E1426DE001BFB18 /* AuthTokenPersistance.swift in Sources */,
+				2262A4372E1558B2001BFB18 /* CandidateDetailView.swift in Sources */,
+				2262A4222E14268F001BFB18 /* KeyChainInterface.swift in Sources */,
+				2262A4282E143C67001BFB18 /* CandidateListViewModel.swift in Sources */,
+				2262A41A2E13CEC0001BFB18 /* AuthenticationViewModel.swift in Sources */,
 				2262A3E22E128B17001BFB18 /* VitesseApp.swift in Sources */,
 				2262A4122E129056001BFB18 /* BusinessModels.swift in Sources */,
+				2262A41D2E13D25E001BFB18 /* AuthenticationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
