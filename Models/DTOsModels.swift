@@ -44,3 +44,13 @@ struct CandidateResponseDTO: Codable, Identifiable {
         let linkedinURL: String?
         let isFavorite: Bool
 }
+
+// UserRegisterRequestDTO
+import Foundation
+
+struct UserRegisterRequestDTO: Codable {
+    let email: String
+    let password: String
+    let firstName: String
+    let lastName: String
+}

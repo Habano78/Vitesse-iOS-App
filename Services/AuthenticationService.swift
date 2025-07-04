@@ -10,6 +10,9 @@ import Foundation
 protocol AuthenticationServiceProtocol {
         @MainActor
         func login(credentials: AuthRequestDTO) async throws -> AuthResponseDTO
+        
+        @MainActor
+        func register(with details: UserRegisterRequestDTO) async throws
 }
 
 // MARK: - Authentication Service Implementation
@@ -75,6 +78,34 @@ class AuthService: AuthenticationServiceProtocol {
                         return authResponse
                 } catch {
                         throw APIServiceError.responseDecodingFailed(error)
+                }
+        }
+        
+        //MARK: pour enregistrer de nouveaux candidats
+        func register(with details: UserRegisterRequestDTO) async throws {
+                // Construire l'URL de l'endpoint
+                let endpointURL = baseURL
+                        .appendingPathComponent("user/register")
+                
+                // Créer et configurer la requête
+                var request = URLRequest(url: endpointURL)
+                request.httpMethod = "POST"
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                
+                // Encoder les détails d'inscription dans le corps de la requête
+                do {
+                        request.httpBody = try jsonEncoder.encode(details)
+                } catch {
+                        throw APIServiceError.requestEncodingFailed(error)
+                }
+                
+                // Exécuter l'appel réseau
+                let (_, response) = try await urlSession.data(for: request)
+                
+                // Valider la réponse du serveur
+                guard let httpResponse = response as? HTTPURLResponse,
+                      httpResponse.statusCode == 201 else { // Le code pour de succés est 201
+                        throw APIServiceError.unexpectedStatusCode((response as? HTTPURLResponse)?.statusCode ?? -1)
                 }
         }
 }

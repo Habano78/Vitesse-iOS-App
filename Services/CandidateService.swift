@@ -20,6 +20,7 @@ protocol CandidateServiceProtocol {
         
         @MainActor
         func updateCandidate(id candidateID: UUID, with payload: CandidatePayloadDTO) async throws -> CandidateResponseDTO
+        
 }
 
 //MARK: Implémentation du contrat
@@ -222,5 +223,4 @@ class CandidateService: CandidateServiceProtocol {
                         throw APIServiceError.responseDecodingFailed(error)
                 }
         }
-        
 }

@@ -14,11 +14,11 @@ enum APIServiceError: Error, LocalizedError, Equatable {
         case responseDecodingFailed(Error) /// si le décodage de la réponse JSON du serveur échoue.
         case networkError(Error) ///pour les erreurs réseau de bas niveau (connectivité, timeout, DNS, etc.).
         case unexpectedStatusCode(Int) ///si le serveur répond avec un code de statut HTTP inattendu
-// MARK: erreurs sémantiques / Métier Communes (souvent liées aux codes 4xx)
+        // MARK: erreurs sémantiques / Métier Communes (souvent liées aux codes 4xx)
         case invalidCredentials///lors d'un échec de login à cause d'identifiants incorrects(réponses HTTP 401 ou 403 sur l'endpoint /auth).
         case tokenInvalidOrExpired///lorsque le token est invalide, expiré ou non autorisé pour la ressource demandée
         
-// MARK: descriptions localisées
+        // MARK: descriptions localisées
         var errorDescription: String? {
                 switch self {
                 case .invalidURL:
