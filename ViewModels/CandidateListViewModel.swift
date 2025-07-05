@@ -19,8 +19,7 @@ class CandidateListViewModel: ObservableObject {
         
         @Published private var allCandidates: [Candidate] = []
         
-        // MARK: - Propriété Calculée pour la Vue
-        // Liste que la vue va réellement afficher qui dépend de `allCandidates` et `searchText`.
+        // MARK: - Propriété Calculée. Liste que la vue va réellement afficher qui dépend de `allCandidates` et `searchText`.
         var candidates: [Candidate] {
                 
                 var filteredCandidates = allCandidates/// on part de la liste complete

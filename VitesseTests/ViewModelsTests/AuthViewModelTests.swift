@@ -47,4 +47,32 @@ struct AuthViewModelTests {
                 // Assert
                 #expect(viewModel.errorMessage == APIServiceError.invalidCredentials.localizedDescription)
         }
+        
+        // erreur bidon juste pour ce test.
+        
+        
+        @Test("Vérifie que le message d'erreur générique est affiché lors d'une erreur inconnue")
+        func testLogin_whenUnknownErrorOccurs_shouldSetGenericErrorMessage() async {
+                // Arrange
+                /// erreur bidon
+                struct GenericError: Error {}
+                let mockAuthService = MockAuthService()
+                // le mock pour lance l'erreur définit
+                mockAuthService.loginResult = .failure(GenericError())
+                
+                var wasSuccessCallbackCalled = false
+                let viewModel = AuthViewModel(
+                        authService: mockAuthService,
+                        onLoginSucceed: { _ in
+                                wasSuccessCallbackCalled = true
+                        }
+                )
+                
+                // Act
+                await viewModel.login()
+                
+                // Assert
+                #expect(wasSuccessCallbackCalled == false)
+                #expect(viewModel.errorMessage == "Erreur inattendue.Veuillez réessayer.")
+        }
 }

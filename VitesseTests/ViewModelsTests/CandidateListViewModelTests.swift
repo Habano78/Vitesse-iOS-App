@@ -87,4 +87,49 @@ struct CandidateListViewModelTests {
                 #expect(viewModel.candidates.count == 1, "Il ne devrait rester qu'un seul candidat dans la liste.")
                 #expect(viewModel.candidates.first?.id == candidate2.id)
         }
+        
+        @Test("Vérifie l'erreur générique lors de l'échec de la récupération des candidats")
+        func testFetchCandidates_whenUnknownErrorOccurs_shouldSetGenericErrorMessage() async {
+                // Arrange
+                ///erreur bidon
+                struct GenericError: Error {}
+                mockCandidateService.fetchCandidatesResult = .failure(GenericError())
+                
+                // Act
+                await viewModel.fetchCandidates()
+                
+                // Assert
+                #expect(viewModel.errorMessage == "Une erreur inattendue est survenue.")
+        }
+        
+        @Test("Vérifie la gestion d'erreur lors de l'échec de la suppression")
+        func testDeleteCandidate_whenAPIFails_shouldSetErrorMessage() async {
+                // Arrange
+                // On pré-charge le ViewModel avec des données.
+                let candidateToFailDelete = CandidateResponseDTO(
+                        id: UUID(),
+                        firstName: "John",
+                        lastName: "Doe",
+                        email: "",
+                        phone: nil,
+                        note: nil,
+                        linkedinURL: nil,
+                        isFavorite: false)
+                
+                mockCandidateService.fetchCandidatesResult = .success([candidateToFailDelete])
+                await viewModel.fetchCandidates()
+                
+                // On configure le mock pour que la suppression échoue.
+                let expectedError = APIServiceError.unexpectedStatusCode(500)
+                mockCandidateService.deleteCandidateResult = .failure(expectedError)
+                
+                // Act
+                await viewModel.deleteCandidate(at: IndexSet(integer: 0))
+                
+                // Assert
+                #expect(viewModel.errorMessage != nil)
+                #expect(viewModel.errorMessage?.contains("La suppression de John a échoué") == true)
+        }
+        
+        
 }
