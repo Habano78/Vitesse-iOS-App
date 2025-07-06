@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2262A3E22E128B17001BFB18 /* VitesseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A3E12E128B17001BFB18 /* VitesseApp.swift */; };
 		2262A4102E129035001BFB18 /* DTOsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A40F2E129035001BFB18 /* DTOsModels.swift */; };
 		2262A4122E129056001BFB18 /* BusinessModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4112E129056001BFB18 /* BusinessModels.swift */; };
 		2262A4142E133570001BFB18 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4132E133570001BFB18 /* AuthenticationService.swift */; };
@@ -15,7 +14,6 @@
 		2262A4182E13CBEB001BFB18 /* Errors_Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4172E13CBEB001BFB18 /* Errors_Service.swift */; };
 		2262A41A2E13CEC0001BFB18 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4192E13CEC0001BFB18 /* AuthenticationViewModel.swift */; };
 		2262A41D2E13D25E001BFB18 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A41C2E13D25E001BFB18 /* AuthenticationView.swift */; };
-		2262A41F2E13D712001BFB18 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A41E2E13D712001BFB18 /* ViewExtension.swift */; };
 		2262A4222E14268F001BFB18 /* KeyChainInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4212E14268F001BFB18 /* KeyChainInterface.swift */; };
 		2262A4242E1426DE001BFB18 /* AuthTokenPersistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4232E1426DE001BFB18 /* AuthTokenPersistance.swift */; };
 		2262A4262E14270F001BFB18 /* AuthTokenPersistanceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4252E14270F001BFB18 /* AuthTokenPersistanceProtocol.swift */; };
@@ -28,6 +26,10 @@
 		2262A43B2E16A50A001BFB18 /* RegistrerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A43A2E16A50A001BFB18 /* RegistrerView.swift */; };
 		2262A43F2E17B906001BFB18 /* JsonEncoderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A43E2E17B906001BFB18 /* JsonEncoderProtocol.swift */; };
 		2262A4402E17B906001BFB18 /* JsonEncoderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A43E2E17B906001BFB18 /* JsonEncoderProtocol.swift */; };
+		2262A44E2E1AA618001BFB18 /* HTTPMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A44D2E1AA618001BFB18 /* HTTPMethods.swift */; };
+		2262A44F2E1AA618001BFB18 /* HTTPMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A44D2E1AA618001BFB18 /* HTTPMethods.swift */; };
+		2262A4512E1AA699001BFB18 /* APIServicesCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4502E1AA699001BFB18 /* APIServicesCall.swift */; };
+		2262A4522E1AA699001BFB18 /* APIServicesCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4502E1AA699001BFB18 /* APIServicesCall.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,7 +51,6 @@
 
 /* Begin PBXFileReference section */
 		2262A3DE2E128B17001BFB18 /* Vitesse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vitesse.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2262A3E12E128B17001BFB18 /* VitesseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitesseApp.swift; sourceTree = "<group>"; };
 		2262A3EE2E128B19001BFB18 /* VitesseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitesseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2262A3F82E128B19001BFB18 /* VitesseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitesseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2262A40F2E129035001BFB18 /* DTOsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTOsModels.swift; sourceTree = "<group>"; };
@@ -59,7 +60,6 @@
 		2262A4172E13CBEB001BFB18 /* Errors_Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors_Service.swift; sourceTree = "<group>"; };
 		2262A4192E13CEC0001BFB18 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		2262A41C2E13D25E001BFB18 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
-		2262A41E2E13D712001BFB18 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		2262A4212E14268F001BFB18 /* KeyChainInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainInterface.swift; sourceTree = "<group>"; };
 		2262A4232E1426DE001BFB18 /* AuthTokenPersistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenPersistance.swift; sourceTree = "<group>"; };
 		2262A4252E14270F001BFB18 /* AuthTokenPersistanceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenPersistanceProtocol.swift; sourceTree = "<group>"; };
@@ -71,6 +71,8 @@
 		2262A4382E16A3C5001BFB18 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		2262A43A2E16A50A001BFB18 /* RegistrerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrerView.swift; sourceTree = "<group>"; };
 		2262A43E2E17B906001BFB18 /* JsonEncoderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonEncoderProtocol.swift; sourceTree = "<group>"; };
+		2262A44D2E1AA618001BFB18 /* HTTPMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethods.swift; sourceTree = "<group>"; };
+		2262A4502E1AA699001BFB18 /* APIServicesCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServicesCall.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -119,7 +121,6 @@
 		2262A3D52E128B17001BFB18 = {
 			isa = PBXGroup;
 			children = (
-				2262A3E12E128B17001BFB18 /* VitesseApp.swift */,
 				2262A40B2E128FEA001BFB18 /* Models */,
 				2262A40C2E128FF3001BFB18 /* ViewModels */,
 				2262A41B2E13D23F001BFB18 /* Views */,
@@ -168,7 +169,6 @@
 			children = (
 				2262A4132E133570001BFB18 /* AuthenticationService.swift */,
 				2262A42B2E146248001BFB18 /* CandidateService.swift */,
-				2262A4172E13CBEB001BFB18 /* Errors_Service.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -177,8 +177,10 @@
 			isa = PBXGroup;
 			children = (
 				2262A4152E13CAAD001BFB18 /* URLSessionProtocol.swift */,
-				2262A41E2E13D712001BFB18 /* ViewExtension.swift */,
 				2262A43E2E17B906001BFB18 /* JsonEncoderProtocol.swift */,
+				2262A4502E1AA699001BFB18 /* APIServicesCall.swift */,
+				2262A44D2E1AA618001BFB18 /* HTTPMethods.swift */,
+				2262A4172E13CBEB001BFB18 /* Errors_Service.swift */,
 			);
 			path = Outils;
 			sourceTree = "<group>";
@@ -359,15 +361,15 @@
 				2262A42A2E144BAD001BFB18 /* CandidateListView.swift in Sources */,
 				2262A4352E1550B3001BFB18 /* CandidateDetailViewModel.swift in Sources */,
 				2262A4392E16A3C5001BFB18 /* RegisterViewModel.swift in Sources */,
-				2262A41F2E13D712001BFB18 /* ViewExtension.swift in Sources */,
 				2262A4242E1426DE001BFB18 /* AuthTokenPersistance.swift in Sources */,
 				2262A4372E1558B2001BFB18 /* CandidateDetailView.swift in Sources */,
 				2262A4222E14268F001BFB18 /* KeyChainInterface.swift in Sources */,
 				2262A4282E143C67001BFB18 /* CandidateListViewModel.swift in Sources */,
 				2262A41A2E13CEC0001BFB18 /* AuthenticationViewModel.swift in Sources */,
-				2262A3E22E128B17001BFB18 /* VitesseApp.swift in Sources */,
+				2262A4512E1AA699001BFB18 /* APIServicesCall.swift in Sources */,
 				2262A4122E129056001BFB18 /* BusinessModels.swift in Sources */,
 				2262A41D2E13D25E001BFB18 /* AuthenticationView.swift in Sources */,
+				2262A44F2E1AA618001BFB18 /* HTTPMethods.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,6 +378,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2262A4402E17B906001BFB18 /* JsonEncoderProtocol.swift in Sources */,
+				2262A4522E1AA699001BFB18 /* APIServicesCall.swift in Sources */,
+				2262A44E2E1AA618001BFB18 /* HTTPMethods.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

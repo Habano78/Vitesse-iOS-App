@@ -131,5 +131,18 @@ struct CandidateListViewModelTests {
                 #expect(viewModel.errorMessage?.contains("La suppression de John a échoué") == true)
         }
         
-        
+        @Test("Vérifie la gestion d'une erreur API spécifique lors de la récupération des candidats")
+        func testFetchCandidates_whenAPIServiceFails_shouldSetErrorMessage() async {
+                // Arrange
+                // On configure le mock pour qu'il échoue avec une erreur API connue
+                let expectedError = APIServiceError.networkError(NSError(domain: "Test", code: -1))
+                mockCandidateService.fetchCandidatesResult = .failure(expectedError)
+                
+                // Act
+                await viewModel.fetchCandidates()
+                
+                // Assert
+                #expect(viewModel.candidates.isEmpty == true)
+                #expect(viewModel.errorMessage == expectedError.localizedDescription)
+        }
 }

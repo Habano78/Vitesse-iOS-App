@@ -42,7 +42,7 @@ struct CandidateResponseDTO: Codable, Identifiable {
         let phone: String?
         let note: String?
         let linkedinURL: String?
-        let isFavorite: Bool
+        var isFavorite: Bool
 }
 
 // UserRegisterRequestDTO

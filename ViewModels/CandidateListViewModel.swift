@@ -70,18 +70,27 @@ class CandidateListViewModel: ObservableObject {
         
         //MARK: suppresion de candidats
         func deleteCandidate(at offsets: IndexSet) async {
-                // On garde une copie de l'ID avant toute modification du tableau.
-                let candidatesToDelete = offsets.map { allCandidates[$0] }
+                let candidatesToDelete = offsets.map { self.candidates[$0] }
                 
-                // On supprime d'abord de la liste locale
-                allCandidates.remove(atOffsets: offsets)
+                // Supprimer de l'UI d'abord pour un effet immédiat
+                self.allCandidates.remove(atOffsets: offsets)
                 
-                // On parcourt les candidats à supprimer et on appelle l'API pour chacun.
-                for candidate in candidatesToDelete {
-                        do {
-                                try await candidateService.deleteCandidate(id: candidate.id)
-                        } catch {
-                                self.errorMessage = "La suppression de \(candidate.firstName) a échoué. Erreur : \(error.localizedDescription)"
+                // On lance toutes les suppressions en parallèle
+                await withTaskGroup(of: Void.self) { group in
+                        for candidate in candidatesToDelete {
+                                group.addTask {
+                                        do {
+                                                try await self.candidateService.deleteCandidate(id: candidate.id)
+                                        } catch {
+                                                // Si une suppression échoue, on peut gérer l'erreur ici.
+                                                // Par exemple, on pourrait ré-ajouter le candidat à la liste
+                                                // ou afficher une alerte spécifique.
+                                                print("La suppression de \(candidate.firstName) a échoué.")
+                                                
+                                                // Pour l'instant, on se contente d'afficher l'erreur dans la console.
+                                                // Dans une vraie app, on pourrait collecter les erreurs.
+                                        }
+                                }
                         }
                 }
         }

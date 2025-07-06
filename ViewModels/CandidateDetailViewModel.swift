@@ -26,6 +26,7 @@ class CandidateDetailViewModel: ObservableObject {
         @Published var editablePhone: String = ""
         @Published var editableNote: String = ""
         @Published var editableLinkedinURL: String = ""
+        @Published var isTogglingFavorite: Bool = false
         
         // MARK: - Dépendance
         private let candidateService: CandidateServiceProtocol
@@ -88,16 +89,14 @@ class CandidateDetailViewModel: ObservableObject {
                 }
         }
         func toggleFavoriteStatus() async {
+                isTogglingFavorite = true
+                defer { isTogglingFavorite = false } ///S'assurer que c'est remis à false à la fin
+                
                 do {
-                        /// Appelle au service pour changer le statut favori
                         let updatedCandidateDTO = try await candidateService.toggleFavoriteStatus(id: candidate.id)
-                        /// On met à jour le modèle métier local avec la réponse du serveur
                         self.candidate = Candidate(from: updatedCandidateDTO)
-                        
                 } catch {
-                        // Gérer l'erreur si nécessaire
                         print("Erreur lors de la mise à jour du statut favori : \(error.localizedDescription)")
                 }
         }
-        
 }

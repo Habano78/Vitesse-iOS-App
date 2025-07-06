@@ -38,6 +38,7 @@ struct RegisterViewModelTests {
                 #expect(wasSuccessCallbackCalled == true)
                 #expect(viewModel.errorMessage == nil)
                 #expect(mockAuthService.registerCallCount == 1)
+                #expect(mockAuthService.receivedRegistrationDetails?.email == "test@user.com")
         }
         
         @Test("Vérifie l'erreur quand les mots de passe ne correspondent pas")

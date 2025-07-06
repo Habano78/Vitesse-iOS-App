@@ -28,7 +28,7 @@ class AuthTokenPersistence: AuthTokenPersistenceProtocol {
 
     func retrieveToken() throws -> String? {
         do {
-            let item = try keychainService.retrieve(label: tokenLabel, queryAttributes: [:]) // On passe l'argument manquant
+            let item = try keychainService.retrieve(label: tokenLabel, queryAttributes: [:])
             guard let tokenData = item[kSecValueData as String] as? Data,
                   let tokenString = String(data: tokenData, encoding: .utf8) else {
                 throw KeychainService.KeychainError.unexpectedData

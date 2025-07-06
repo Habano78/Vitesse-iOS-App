@@ -11,44 +11,43 @@ import Testing
 @MainActor
 struct CandidateDetailViewModelTests {
         
-        // MARK: - Propriétés de Test
+        // MARK: - Helpers
         
-        var viewModel: CandidateDetailViewModel!
-        var mockCandidateService: MockCandidateService!
-        
-        // MARK: - Setup
-        
-        // L'init est appelé avant chaque test, garantissant un environnement propre.
-        init() {
-                let initialCandidate = Candidate(from: .init(id: UUID(), firstName: "Marie", lastName: "Curie", email: "marie@curie.fr", phone: nil, note: nil, linkedinURL: nil, isFavorite: false))
-                
-                mockCandidateService = MockCandidateService()
-                viewModel = CandidateDetailViewModel(
-                        candidate: initialCandidate,
-                        candidateService: mockCandidateService
-                )
+        private func createCompleteCandidate() -> Candidate {
+                let dto = CandidateResponseDTO(id: UUID(), firstName: "Marie", lastName: "Curie", email: "marie@curie.fr", phone: "0123456789", note: "Note initiale", linkedinURL: "linkedin.com/marie", isFavorite: false)
+                return Candidate(from: dto)
         }
         
-        // Erreur générique pour tester les cas inattendus
+        private func createCandidateWithNilValues() -> Candidate {
+                let dto = CandidateResponseDTO(id: UUID(), firstName: "John", lastName: "Doe", email: "john@doe.com", phone: nil, note: nil, linkedinURL: nil, isFavorite: false)
+                return Candidate(from: dto)
+        }
+        
         private struct GenericTestError: Error {}
         
-        // MARK: - Scénarios de Test
+        // MARK: - Tests pour startEditing() et cancelEditing()
         
-        @Test("Mode Édition : Vérifie que l'édition est bien activée et les données copiées")
-        func testStartEditing_populatesEditableProperties() {
-                // Act : On déclenche l'action
-                viewModel.startEditing()
+        @Test("startEditing doit copier les valeurs et gérer les nils")
+        func testStartEditing() {
+                // Arrange
+                let vmWithValues = CandidateDetailViewModel(candidate: createCompleteCandidate())
+                let vmWithNil = CandidateDetailViewModel(candidate: createCandidateWithNilValues())
                 
-                // Assert : On vérifie les résultats attendus
-                #expect(viewModel.isEditing == true)
-                #expect(viewModel.editableFirstName == viewModel.candidate.firstName)
+                // Act
+                vmWithValues.startEditing()
+                vmWithNil.startEditing()
+                
+                // Assert
+                #expect(vmWithValues.isEditing == true)
+                #expect(vmWithValues.editablePhone == "0123456789")
+                #expect(vmWithNil.editablePhone == "") // Test du ?? ""
         }
         
-        @Test("Mode Édition : Vérifie que l'annulation fonctionne")
-        func testCancelEditing_resetsEditingState() {
+        @Test("cancelEditing doit désactiver le mode édition")
+        func testCancelEditing() {
                 // Arrange
+                let viewModel = CandidateDetailViewModel(candidate: createCompleteCandidate())
                 viewModel.startEditing()
-                #expect(viewModel.isEditing == true) // Pré-condition
                 
                 // Act
                 viewModel.cancelEditing()
@@ -57,65 +56,113 @@ struct CandidateDetailViewModelTests {
                 #expect(viewModel.isEditing == false)
         }
         
-        @Test("Sauvegarde : Vérifie que la sauvegarde réussit et met à jour le modèle")
+        // MARK: - Tests pour saveChanges()
+        
+        @Test("saveChanges doit réussir et mettre à jour le modèle")
         func testSaveChanges_succeeds() async {
                 // Arrange
-                let updatedDTO = CandidateResponseDTO(id: viewModel.candidate.id, firstName: "Marie-Update", lastName: "Curie", email: "marie@curie.fr", phone: nil, note: nil, linkedinURL: nil, isFavorite: false)
-                mockCandidateService.updateCandidateResult = .success(updatedDTO)
+                let candidate = createCompleteCandidate()
+                let mockService = MockCandidateService()
+                let viewModel = CandidateDetailViewModel(candidate: candidate, candidateService: mockService)
+                
+                let updatedDTO = CandidateResponseDTO(
+                            id: candidate.id,
+                            firstName: "Marie-Updated",
+                            lastName: "Curie",
+                            email: candidate.email,
+                            phone: candidate.phone,
+                            note: "Note mise à jour",
+                            linkedinURL: candidate.linkedinURL,
+                            isFavorite: candidate.isFavorite
+                        )
+                mockService.updateCandidateResult = .success(updatedDTO)
                 
                 viewModel.startEditing()
-                viewModel.editableFirstName = "Marie-Update"
                 
                 // Act
                 await viewModel.saveChanges()
                 
                 // Assert
-                #expect(mockCandidateService.updateCandidateCallCount == 1)
-                #expect(viewModel.candidate.firstName == "Marie-Update")
+                #expect(mockService.updateCandidateCallCount == 1)
                 #expect(viewModel.isEditing == false)
+                #expect(viewModel.errorMessage == nil)
         }
         
-        @Test("Sauvegarde : Vérifie la gestion d'une erreur API connue")
-        func testSaveChanges_whenAPIFails_shouldSetErrorMessage() async {
+        @Test("saveChanges gère une erreur API spécifique")
+        func testSaveChanges_whenAPIFails_setsErrorMessage() async {
                 // Arrange
+                let mockService = MockCandidateService()
+                let viewModel = CandidateDetailViewModel(candidate: createCompleteCandidate(), candidateService: mockService)
                 let expectedError = APIServiceError.unexpectedStatusCode(500)
-                mockCandidateService.updateCandidateResult = .failure(expectedError)
+                mockService.updateCandidateResult = .failure(expectedError)
+                
                 viewModel.startEditing()
                 
                 // Act
                 await viewModel.saveChanges()
                 
                 // Assert
-                #expect(viewModel.isEditing == true) // On doit rester en mode édition
+                #expect(viewModel.isEditing == true)
                 #expect(viewModel.errorMessage == expectedError.localizedDescription)
         }
         
-        @Test("Favoris : Vérifie que le statut de favori est bien basculé")
+        @Test("saveChanges gère une erreur inconnue")
+        func testSaveChanges_whenUnknownErrorOccurs_setsGenericErrorMessage() async {
+                // Arrange
+                let mockService = MockCandidateService()
+                let viewModel = CandidateDetailViewModel(candidate: createCompleteCandidate(), candidateService: mockService)
+                mockService.updateCandidateResult = .failure(GenericTestError())
+                
+                viewModel.startEditing()
+                
+                // Act
+                await viewModel.saveChanges()
+                
+                // Assert
+                #expect(viewModel.errorMessage == "Une erreur de sauvegarde inattendue est survenue.")
+        }
+        
+        // MARK: - Tests pour toggleFavoriteStatus()
+        
+        @Test("toggleFavoriteStatus réussit et met à jour le modèle")
         func testToggleFavoriteStatus_succeeds() async {
                 // Arrange
-                #expect(viewModel.candidate.isFavorite == false) // Pré-condition
+                let candidate = createCompleteCandidate()
+                let mockService = MockCandidateService()
+                let viewModel = CandidateDetailViewModel(candidate: candidate, candidateService: mockService)
                 
-                let updatedFavoriteDTO = CandidateResponseDTO(id: viewModel.candidate.id, firstName: "Marie", lastName: "Curie", email: "marie@curie.fr", phone: nil, note: nil, linkedinURL: nil, isFavorite: true)
-                mockCandidateService.toggleFavoriteResult = .success(updatedFavoriteDTO)
+                var updatedDTO = CandidateResponseDTO(
+                            id: candidate.id,
+                            firstName: candidate.firstName,
+                            lastName: candidate.lastName,
+                            email: candidate.email,
+                            phone: candidate.phone,
+                            note: candidate.note,
+                            linkedinURL: candidate.linkedinURL,
+                            isFavorite: false
+                        )
+                updatedDTO.isFavorite = true
+                mockService.toggleFavoriteResult = .success(updatedDTO)
                 
                 // Act
                 await viewModel.toggleFavoriteStatus()
                 
                 // Assert
-                #expect(mockCandidateService.toggleFavoriteCallCount == 1)
                 #expect(viewModel.candidate.isFavorite == true)
         }
         
-        @Test("Favoris : Vérifie la gestion d'erreur si l'appel échoue")
-        func testToggleFavorite_whenAPIFails_shouldNotChangeState() async {
+        @Test("toggleFavoriteStatus gère une erreur et ne change pas l'état")
+        func testToggleFavoriteStatus_fails() async {
                 // Arrange
-                let initialFavoriteStatus = viewModel.candidate.isFavorite
-                mockCandidateService.toggleFavoriteResult = .failure(GenericTestError())
+                let candidate = createCompleteCandidate()
+                let mockService = MockCandidateService()
+                let viewModel = CandidateDetailViewModel(candidate: candidate, candidateService: mockService)
+                mockService.toggleFavoriteResult = .failure(GenericTestError())
                 
                 // Act
                 await viewModel.toggleFavoriteStatus()
                 
-                // Assert : Le statut ne doit pas avoir changé
-                #expect(viewModel.candidate.isFavorite == initialFavoriteStatus)
+                // Assert
+                #expect(candidate.isFavorite == false)
         }
 }

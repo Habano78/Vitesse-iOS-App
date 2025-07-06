@@ -8,7 +8,6 @@
 
 import Foundation
 
-@MainActor
 class APIService {
         
         private let urlSession: URLSessionProtocol
@@ -58,7 +57,7 @@ class APIService {
                 _ = try await performBaseRequest(to: endpoint, method: method, payload: payload, needsAuth: needsAuth)
         }
         
-        // ----- CŒUR DE LA LOGIQUE PARTAGÉE -----
+        //  CŒUR DE LA LOGIQUE PARTAGÉE
         private func performBaseRequest(
                 to endpoint: String,
                 method: HTTPMethod,
