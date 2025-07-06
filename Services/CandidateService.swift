@@ -21,6 +21,8 @@ protocol CandidateServiceProtocol {
         @MainActor
         func updateCandidate(id candidateID: UUID, with payload: CandidatePayloadDTO) async throws -> CandidateResponseDTO
         
+        @MainActor
+        func createCandidate(with payload: CandidatePayloadDTO) async throws -> CandidateResponseDTO
 }
 
 //MARK: Implémentation du contrat
@@ -47,5 +49,11 @@ class CandidateService: APIService, CandidateServiceProtocol {
         func updateCandidate(id candidateID: UUID, with payload: CandidatePayloadDTO) async throws -> CandidateResponseDTO {
                 let endpoint = "candidate/\(candidateID.uuidString)"
                 return try await performRequest(to: endpoint, method: .PUT, payload: payload)
+        }
+        
+        func createCandidate(with payload: CandidatePayloadDTO) async throws -> CandidateResponseDTO {
+                // L'API attend une requête POST sur l'endpoint "candidate"
+                // et retourne le candidat nouvellement créé.
+                return try await performRequest(to: "candidate", method: .POST, payload: payload)
         }
 }

@@ -94,6 +94,10 @@ class CandidateListViewModel: ObservableObject {
                         }
                 }
         }
-        
+        //MARK: rajouter des candidats 
+        func addCandidateToList(_ candidate: Candidate) {
+                // On insère le nouveau candidat au début de notre liste source
+                allCandidates.insert(candidate, at: 0)
+            }
 }
 

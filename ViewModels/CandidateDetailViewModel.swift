@@ -28,14 +28,19 @@ class CandidateDetailViewModel: ObservableObject {
         @Published var editableLinkedinURL: String = ""
         @Published var isTogglingFavorite: Bool = false
         
+        //propriété pour notifier du statut admin
+        let isAdmin: Bool
+        
         // MARK: - Dépendance
         private let candidateService: CandidateServiceProtocol
         
         //MARK: init et injection de dépendance
         init(candidate: Candidate,
+             isAdmin: Bool,
              candidateService: CandidateServiceProtocol = CandidateService()
         ) {
                 self.candidate = candidate
+                self.isAdmin = isAdmin
                 self.candidateService = candidateService
         }
         
@@ -90,13 +95,20 @@ class CandidateDetailViewModel: ObservableObject {
         }
         func toggleFavoriteStatus() async {
                 isTogglingFavorite = true
-                defer { isTogglingFavorite = false } ///S'assurer que c'est remis à false à la fin
+                errorMessage = nil // On efface les anciens messages
+                defer { isTogglingFavorite = false }
                 
                 do {
                         let updatedCandidateDTO = try await candidateService.toggleFavoriteStatus(id: candidate.id)
                         self.candidate = Candidate(from: updatedCandidateDTO)
+                        print("Statut favori mis à jour pour : \(self.candidate.firstName)")
+                } catch let error as APIServiceError {
+                        // On affiche les erreurs de notre service
+                        self.errorMessage = error.localizedDescription
                 } catch {
-                        print("Erreur lors de la mise à jour du statut favori : \(error.localizedDescription)")
+                        // On affiche les erreurs inattendues
+                        self.errorMessage = "Une erreur inattendue est survenue."
+                        print("Erreur toggleFavoriteStatus: \(error.localizedDescription)")
                 }
         }
 }

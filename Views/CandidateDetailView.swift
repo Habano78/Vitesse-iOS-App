@@ -8,114 +8,145 @@ import SwiftUI
 
 struct CandidateDetailView: View {
         
-        // MARK: - Properties
-        
         @StateObject private var viewModel: CandidateDetailViewModel
         
-        // MARK: - Initialization
+        let isAdmin: Bool
         
-        init(candidate: Candidate) {
-                _viewModel = StateObject(wrappedValue: CandidateDetailViewModel(candidate: candidate))
+        init(candidate: Candidate, isAdmin: Bool) {
+                self.isAdmin = isAdmin
+                _viewModel = StateObject(wrappedValue: CandidateDetailViewModel(
+                        candidate: candidate,
+                        isAdmin: isAdmin
+                ))
         }
         
-        // MARK: - Body
-        
         var body: some View {
-                Form {
-                        Section(header: Text("Informations Personnelles")) {
-                                // On affiche soit un Text, soit un TextField en fonction du mode édition
-                                if viewModel.isEditing {
-                                        TextField("Prénom", text: $viewModel.editableFirstName)
-                                        TextField("Nom", text: $viewModel.editableLastName)
-                                } else {
-                                        Text(viewModel.candidate.lastName)
-                                        Text(viewModel.candidate.firstName)
-                                }
-                        }
-                        
-                        Section(header: Text("Contact")) {
-                                if viewModel.isEditing {
-                                        TextField("Email", text: $viewModel.editableEmail)
-                                                .keyboardType(.emailAddress)
-                                        TextField("Téléphone", text: $viewModel.editablePhone)
-                                                .keyboardType(.phonePad)
-                                        TextField("Profil LinkedIn", text: $viewModel.editableLinkedinURL)
-                                                .keyboardType(.URL)
-                                } else {
-                                        Text(viewModel.candidate.email)
-                                        if let phone = viewModel.candidate.phone, !phone.isEmpty {
-                                                Text(phone)
-                                        }
-                                        if let linkedin = viewModel.candidate.linkedinURL, !linkedin.isEmpty {
-                                                Text(linkedin)
-                                        }
-                                }
-                        }
-                        
-                        Section(header: Text("Notes")) {
-                                if viewModel.isEditing {
-                                        // TextEditor est plus adapté pour du texte multi-lignes
-                                        TextEditor(text: $viewModel.editableNote)
-                                                .frame(minHeight: 150)
-                                } else {
-                                        if let note = viewModel.candidate.note, !note.isEmpty {
-                                                Text(note)
-                                        } else {
-                                                Text("Aucune note").italic().foregroundColor(.secondary)
-                                        }
-                                }
-                        }
-                        
-                        // On affiche le message d'erreur s'il y en a un
-                        if let errorMessage = viewModel.errorMessage {
-                                Section {
-                                        Text(errorMessage)
-                                                .foregroundColor(.red)
-                                }
-                        }
+                // En mode édition, on utilise la vue avec les champs de texte
+                if viewModel.isEditing {
+                        editableCandidateView
+                } else {
+                        // En mode lecture, on utilise la vue personnalisée
+                        readOnlyCandidateView
                 }
-                .navigationTitle(viewModel.isEditing ? "Édition" : "\(viewModel.candidate.firstName) \(viewModel.candidate.lastName)")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                        // Le contenu de la toolbar change aussi en fonction du mode
-                        if viewModel.isEditing {
-                                // Boutons en mode édition
-                                ToolbarItem(placement: .cancellationAction) {
-                                        Button("Annuler") {
-                                                viewModel.cancelEditing()
-                                        }
-                                }
-                                ToolbarItem(placement: .confirmationAction) {
-                                        // On affiche un spinner si la sauvegarde est en cours
-                                        if viewModel.isLoading {
-                                                ProgressView()
-                                        } else {
-                                                Button("Sauvegarder") {
-                                                        Task {
-                                                                await viewModel.saveChanges()
-                                                        }
-                                                }
-                                        }
-                                }
-                        } else {
-                                // Boutons en mode lecture
-                                ToolbarItem(placement: .navigationBarTrailing) {
-                                        // Bouton Favori
+        }
+        
+        // MARK: - Vue en Mode Lecture (Conforme au Wireframe)
+        private var readOnlyCandidateView: some View {
+                ScrollView {
+                        VStack(alignment: .leading, spacing: 25) {
+                                // Grand titre avec le nom et le bouton favori
+                                HStack {
+                                        Text("\(viewModel.candidate.firstName) \(viewModel.candidate.lastName)")
+                                                .font(.largeTitle)
+                                                .fontWeight(.bold)
+                                        Spacer()
+                                        
+                                        // Bouton favori, conditionné par le statut admin
                                         Button {
-                                                Task {
-                                                        await viewModel.toggleFavoriteStatus()
-                                                }
+                                                Task { await viewModel.toggleFavoriteStatus() }
                                         } label: {
                                                 Image(systemName: viewModel.candidate.isFavorite ? "star.fill" : "star")
                                                         .foregroundColor(.yellow)
+                                                        .font(.title2)
                                         }
+                                        .disabled(!viewModel.isAdmin)
+                                }
+                                
+                                // Section Contact
+                                VStack(alignment: .leading, spacing: 15) {
+                                        if let phone = viewModel.candidate.phone, !phone.isEmpty {
+                                                detailRow(label: "Phone", value: phone)
+                                        }
+                                        detailRow(label: "Email", value: viewModel.candidate.email)
                                         
-                                        // Bouton Modifier
-                                        Button("Modifier") {
-                                                viewModel.startEditing()
+                                        if let urlString = viewModel.candidate.linkedinURL, let url = URL(string: urlString) {
+                                                // Le bouton pour ouvrir LinkedIn
+                                                Link(destination: url) {
+                                                        Text("Go on LinkedIn")
+                                                                .font(.headline)
+                                                                .frame(maxWidth: 150)
+                                                                .padding(8)
+                                                                .background(Color.blue.opacity(0.1))
+                                                                .foregroundColor(.blue)
+                                                                .cornerRadius(8)
+                                                }
+                                        }
+                                }
+                                
+                                // Section Notes
+                                VStack(alignment: .leading) {
+                                        Text("Note")
+                                                .font(.headline)
+                                                .padding(.bottom, 5)
+                                        
+                                        Text(viewModel.candidate.note ?? "Aucune note")
+                                                .padding()
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .background(Color(.secondarySystemBackground))
+                                                .cornerRadius(8)
+                                }
+                        }
+                        .padding()
+                }
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                                Button("Edit") {
+                                        viewModel.startEditing()
+                                }
+                        }
+                }
+        }
+        
+        // MARK: Vue en Mode Édition (Utilise un Form)
+        private var editableCandidateView: some View {
+                NavigationStack {
+                        Form {
+                                Section("Informations Personnelles") {
+                                        TextField("Prénom", text: $viewModel.editableFirstName)
+                                        TextField("Nom", text: $viewModel.editableLastName)
+                                }
+                                
+                                Section("Contact") {
+                                        TextField("Email", text: $viewModel.editableEmail).keyboardType(.emailAddress)
+                                        TextField("Téléphone", text: $viewModel.editablePhone).keyboardType(.phonePad)
+                                        TextField("Profil LinkedIn", text: $viewModel.editableLinkedinURL).keyboardType(.URL)
+                                }
+                                
+                                Section("Notes") {
+                                        TextEditor(text: $viewModel.editableNote)
+                                                .frame(minHeight: 150)
+                                }
+                                
+                                if let errorMessage = viewModel.errorMessage {
+                                        Section { Text(errorMessage).foregroundColor(.red) }
+                                }
+                        }
+                        .navigationTitle("\(viewModel.candidate.firstName) \(viewModel.candidate.lastName)")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                                ToolbarItem(placement: .cancellationAction) {
+                                        Button("Cancel") { viewModel.cancelEditing() }
+                                }
+                                ToolbarItem(placement: .confirmationAction) {
+                                        if viewModel.isLoading {
+                                                ProgressView()
+                                        } else {
+                                                Button("Done") { Task { await viewModel.saveChanges() } }
                                         }
                                 }
                         }
+                }
+        }
+        
+        //  fonction d'aide pour éviter la répétition
+        @ViewBuilder
+        private func detailRow(label: String, value: String) -> some View {
+                VStack(alignment: .leading) {
+                        Text(label)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        Text(value)
                 }
         }
 }

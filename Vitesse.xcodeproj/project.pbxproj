@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2262A3E22E128B17001BFB18 /* VitesseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A3E12E128B17001BFB18 /* VitesseApp.swift */; };
 		2262A4102E129035001BFB18 /* DTOsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A40F2E129035001BFB18 /* DTOsModels.swift */; };
 		2262A4122E129056001BFB18 /* BusinessModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4112E129056001BFB18 /* BusinessModels.swift */; };
 		2262A4142E133570001BFB18 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4132E133570001BFB18 /* AuthenticationService.swift */; };
@@ -30,6 +31,10 @@
 		2262A44F2E1AA618001BFB18 /* HTTPMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A44D2E1AA618001BFB18 /* HTTPMethods.swift */; };
 		2262A4512E1AA699001BFB18 /* APIServicesCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4502E1AA699001BFB18 /* APIServicesCall.swift */; };
 		2262A4522E1AA699001BFB18 /* APIServicesCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4502E1AA699001BFB18 /* APIServicesCall.swift */; };
+		2262A4542E1AF76E001BFB18 /* AddCandidateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4532E1AF76E001BFB18 /* AddCandidateViewModel.swift */; };
+		2262A4552E1AF76E001BFB18 /* AddCandidateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4532E1AF76E001BFB18 /* AddCandidateViewModel.swift */; };
+		2262A4572E1AF7FA001BFB18 /* AddCandidateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4562E1AF7FA001BFB18 /* AddCandidateView.swift */; };
+		2262A4582E1AF7FA001BFB18 /* AddCandidateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4562E1AF7FA001BFB18 /* AddCandidateView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		2262A3DE2E128B17001BFB18 /* Vitesse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vitesse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2262A3E12E128B17001BFB18 /* VitesseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitesseApp.swift; sourceTree = "<group>"; };
 		2262A3EE2E128B19001BFB18 /* VitesseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitesseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2262A3F82E128B19001BFB18 /* VitesseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitesseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2262A40F2E129035001BFB18 /* DTOsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTOsModels.swift; sourceTree = "<group>"; };
@@ -73,6 +79,8 @@
 		2262A43E2E17B906001BFB18 /* JsonEncoderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonEncoderProtocol.swift; sourceTree = "<group>"; };
 		2262A44D2E1AA618001BFB18 /* HTTPMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethods.swift; sourceTree = "<group>"; };
 		2262A4502E1AA699001BFB18 /* APIServicesCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServicesCall.swift; sourceTree = "<group>"; };
+		2262A4532E1AF76E001BFB18 /* AddCandidateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCandidateViewModel.swift; sourceTree = "<group>"; };
+		2262A4562E1AF7FA001BFB18 /* AddCandidateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCandidateView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -121,6 +129,7 @@
 		2262A3D52E128B17001BFB18 = {
 			isa = PBXGroup;
 			children = (
+				2262A3E12E128B17001BFB18 /* VitesseApp.swift */,
 				2262A40B2E128FEA001BFB18 /* Models */,
 				2262A40C2E128FF3001BFB18 /* ViewModels */,
 				2262A41B2E13D23F001BFB18 /* Views */,
@@ -160,6 +169,7 @@
 				2262A4272E143C67001BFB18 /* CandidateListViewModel.swift */,
 				2262A4342E1550B3001BFB18 /* CandidateDetailViewModel.swift */,
 				2262A4382E16A3C5001BFB18 /* RegisterViewModel.swift */,
+				2262A4532E1AF76E001BFB18 /* AddCandidateViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -192,6 +202,7 @@
 				2262A4292E144BAD001BFB18 /* CandidateListView.swift */,
 				2262A4362E1558B2001BFB18 /* CandidateDetailView.swift */,
 				2262A43A2E16A50A001BFB18 /* RegistrerView.swift */,
+				2262A4562E1AF7FA001BFB18 /* AddCandidateView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -367,8 +378,11 @@
 				2262A4282E143C67001BFB18 /* CandidateListViewModel.swift in Sources */,
 				2262A41A2E13CEC0001BFB18 /* AuthenticationViewModel.swift in Sources */,
 				2262A4512E1AA699001BFB18 /* APIServicesCall.swift in Sources */,
+				2262A3E22E128B17001BFB18 /* VitesseApp.swift in Sources */,
 				2262A4122E129056001BFB18 /* BusinessModels.swift in Sources */,
+				2262A4572E1AF7FA001BFB18 /* AddCandidateView.swift in Sources */,
 				2262A41D2E13D25E001BFB18 /* AuthenticationView.swift in Sources */,
+				2262A4542E1AF76E001BFB18 /* AddCandidateViewModel.swift in Sources */,
 				2262A44F2E1AA618001BFB18 /* HTTPMethods.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -377,7 +391,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2262A4582E1AF7FA001BFB18 /* AddCandidateView.swift in Sources */,
 				2262A4402E17B906001BFB18 /* JsonEncoderProtocol.swift in Sources */,
+				2262A4552E1AF76E001BFB18 /* AddCandidateViewModel.swift in Sources */,
 				2262A4522E1AA699001BFB18 /* APIServicesCall.swift in Sources */,
 				2262A44E2E1AA618001BFB18 /* HTTPMethods.swift in Sources */,
 			);

@@ -30,8 +30,8 @@ struct CandidateDetailViewModelTests {
         @Test("startEditing doit copier les valeurs et gérer les nils")
         func testStartEditing() {
                 // Arrange
-                let vmWithValues = CandidateDetailViewModel(candidate: createCompleteCandidate())
-                let vmWithNil = CandidateDetailViewModel(candidate: createCandidateWithNilValues())
+                let vmWithValues = CandidateDetailViewModel(candidate: createCompleteCandidate(), isAdmin: true)
+                let vmWithNil = CandidateDetailViewModel(candidate: createCandidateWithNilValues(), isAdmin: true)
                 
                 // Act
                 vmWithValues.startEditing()
@@ -46,7 +46,7 @@ struct CandidateDetailViewModelTests {
         @Test("cancelEditing doit désactiver le mode édition")
         func testCancelEditing() {
                 // Arrange
-                let viewModel = CandidateDetailViewModel(candidate: createCompleteCandidate())
+                let viewModel = CandidateDetailViewModel(candidate: createCompleteCandidate(), isAdmin: true)
                 viewModel.startEditing()
                 
                 // Act
@@ -63,7 +63,7 @@ struct CandidateDetailViewModelTests {
                 // Arrange
                 let candidate = createCompleteCandidate()
                 let mockService = MockCandidateService()
-                let viewModel = CandidateDetailViewModel(candidate: candidate, candidateService: mockService)
+                let viewModel = CandidateDetailViewModel(candidate: candidate, isAdmin: true, candidateService: mockService)
                 
                 let updatedDTO = CandidateResponseDTO(
                             id: candidate.id,
@@ -92,7 +92,7 @@ struct CandidateDetailViewModelTests {
         func testSaveChanges_whenAPIFails_setsErrorMessage() async {
                 // Arrange
                 let mockService = MockCandidateService()
-                let viewModel = CandidateDetailViewModel(candidate: createCompleteCandidate(), candidateService: mockService)
+                let viewModel = CandidateDetailViewModel(candidate: createCompleteCandidate(), isAdmin: true, candidateService: mockService)
                 let expectedError = APIServiceError.unexpectedStatusCode(500)
                 mockService.updateCandidateResult = .failure(expectedError)
                 
@@ -110,7 +110,7 @@ struct CandidateDetailViewModelTests {
         func testSaveChanges_whenUnknownErrorOccurs_setsGenericErrorMessage() async {
                 // Arrange
                 let mockService = MockCandidateService()
-                let viewModel = CandidateDetailViewModel(candidate: createCompleteCandidate(), candidateService: mockService)
+                let viewModel = CandidateDetailViewModel(candidate: createCompleteCandidate(), isAdmin: true, candidateService: mockService)
                 mockService.updateCandidateResult = .failure(GenericTestError())
                 
                 viewModel.startEditing()
@@ -129,7 +129,7 @@ struct CandidateDetailViewModelTests {
                 // Arrange
                 let candidate = createCompleteCandidate()
                 let mockService = MockCandidateService()
-                let viewModel = CandidateDetailViewModel(candidate: candidate, candidateService: mockService)
+                let viewModel = CandidateDetailViewModel(candidate: candidate, isAdmin: true, candidateService: mockService)
                 
                 var updatedDTO = CandidateResponseDTO(
                             id: candidate.id,
@@ -156,7 +156,7 @@ struct CandidateDetailViewModelTests {
                 // Arrange
                 let candidate = createCompleteCandidate()
                 let mockService = MockCandidateService()
-                let viewModel = CandidateDetailViewModel(candidate: candidate, candidateService: mockService)
+                let viewModel = CandidateDetailViewModel(candidate: candidate, isAdmin: true, candidateService: mockService)
                 mockService.toggleFavoriteResult = .failure(GenericTestError())
                 
                 // Act
@@ -164,5 +164,19 @@ struct CandidateDetailViewModelTests {
                 
                 // Assert
                 #expect(candidate.isFavorite == false)
+        }
+
+        @Test("Vérifie que le statut isAdmin est correctement initialisé")
+        func testIsAdmin_isCorrectlySet() {
+            // Arrange
+            let candidate = createCompleteCandidate()
+
+            // Act
+            let adminViewModel = CandidateDetailViewModel(candidate: candidate, isAdmin: true)
+            let nonAdminViewModel = CandidateDetailViewModel(candidate: candidate, isAdmin: false)
+
+            // Assert
+            #expect(adminViewModel.isAdmin == true, "Le ViewModel admin doit avoir isAdmin = true")
+            #expect(nonAdminViewModel.isAdmin == false, "Le ViewModel non-admin doit avoir isAdmin = false")
         }
 }

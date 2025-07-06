@@ -5,74 +5,109 @@
 //  Created by Perez William on 01/07/2025.
 //
 import SwiftUI
-import Foundation
 
 struct CandidateListView: View {
         
-        // MARK: - Properties
-        
-        // la vue crée et conserve une instance du ViewModel
         @StateObject private var viewModel = CandidateListViewModel()
+        @State private var isEditing = false
         
-        // MARK: - Body
+        //Nouvel état pour contrôler l'affichage de la feuille d'ajout
+        @State private var isShowingAddCandidateSheet = false
+        
+        let isAdmin: Bool
+        let onLogout: () -> Void
+        
+        init(isAdmin: Bool, onLogout: @escaping () -> Void) {
+                self.isAdmin = isAdmin
+                self.onLogout = onLogout
+        }
         
         var body: some View {
                 NavigationStack {
-                        // Le contenu de la vue change en fonction de l'état du ViewModel.
-                        Group {
-                                if viewModel.isLoading {
-                                        // 1. État de chargement
-                                        ProgressView()
-                                } else if let errorMessage = viewModel.errorMessage {
-                                        // 2. État d'erreur
-                                        VStack(spacing: 10) {
-                                                Text("Une erreur est survenue")
-                                                        .font(.headline)
-                                                Text(errorMessage)
-                                                        .font(.caption)
-                                                        .foregroundColor(.secondary)
-                                        }
-                                } else if viewModel.candidates.isEmpty {
-                                        
-                                        Text("Aucun candidat pour le moment.")
-                                                .foregroundColor(.secondary)
-                                } else {
-                                        
-                                        List {
-                                                ForEach(viewModel.candidates) { candidate in
-                                                        NavigationLink(destination: CandidateDetailView(candidate: candidate)) {
+                        List {
+                                ForEach(viewModel.candidates) { candidate in
+                                        HStack {
+                                                NavigationLink(destination: CandidateDetailView(candidate: candidate, isAdmin: self.isAdmin)) {
+                                                        HStack {
                                                                 Text("\(candidate.firstName) \(candidate.lastName)")
+                                                                Spacer()
+                                                                if candidate.isFavorite {
+                                                                        Image(systemName: "star.fill")
+                                                                                .foregroundColor(.yellow)
+                                                                }
                                                         }
                                                 }
-                                                .onDelete(perform: { offsets in
-                                                        Task {
-                                                                await viewModel.deleteCandidate(at: offsets)
-                                                        }
-                                                })
                                         }
-                                        .searchable(text: $viewModel.searchText, prompt: "Rechercher un candidat...")
-                                        
                                 }
+                                .onDelete(perform: delete)
                         }
                         .navigationTitle("Candidats")
-                        .toolbar { // Filtrage par favoris
-                                ToolbarItem(placement: .navigationBarTrailing) {
-                                        Button {
-                                                
-                                                viewModel.isFavoritesFilterActive.toggle()
-                                        } label: {
-                                                
-                                                Image(systemName: viewModel.isFavoritesFilterActive ? "star.fill" : "star")
-                                                        .foregroundColor(.yellow)
+                        .navigationBarTitleDisplayMode(.inline)
+                        .searchable(text: $viewModel.searchText, prompt: "Search")
+                        .toolbar {
+                                ToolbarItemGroup(placement: .topBarLeading) {
+                                        Button("Logout", role: .destructive) {
+                                                onLogout()
+                                        }
+                                        Button(isEditing ? "Done" : "Edit") {
+                                                withAnimation {
+                                                        isEditing.toggle()
+                                                }
                                         }
                                 }
+                                
+                                // On regroupe les boutons de droite
+                                ToolbarItemGroup(placement: .topBarTrailing) {
+                                        // Le bouton "+" ne s'affiche que pour les admins
+                                        if isAdmin {
+                                                Button {
+                                                        isShowingAddCandidateSheet = true
+                                                } label: {
+                                                        Image(systemName: "plus")
+                                                }
+                                        }
+                                        
+                                        // Le bouton pour filtrer les favoris
+                                        Button {
+                                                viewModel.isFavoritesFilterActive.toggle()
+                                        } label: {
+                                                Image(systemName: viewModel.isFavoritesFilterActive ? "star.fill" : "star")
+                                        }
+                                        .tint(.yellow)
+                                }
                         }
+                        .environment(\.editMode, .constant(isEditing ? .active : .inactive))
                         .onAppear {
-                                // Lorsque la vue apparaît, on demande au ViewModel de charger les données.
                                 Task {
                                         await viewModel.fetchCandidates()
                                 }
                         }
+                        .overlay {
+                                // ... votre code .overlay reste identique ...
+                                if viewModel.isLoading {
+                                        ProgressView()
+                                } else if let errorMessage = viewModel.errorMessage {
+                                        ContentUnavailableView("Erreur", systemImage: "wifi.slash", description: Text(errorMessage))
+                                } else if viewModel.candidates.isEmpty && !viewModel.searchText.isEmpty {
+                                        ContentUnavailableView.search
+                                } else if viewModel.candidates.isEmpty {
+                                        ContentUnavailableView("Aucun Candidat", systemImage: "person.3.fill")
+                                }
+                        }
+                        // 3. On attache la feuille modale ici
+                        .sheet(isPresented: $isShowingAddCandidateSheet) {
+                                AddCandidateView { newCandidate in
+                                        // Ce code est exécuté quand un candidat est ajouté avec succès
+                                        viewModel.addCandidateToList(newCandidate)
+                                        isShowingAddCandidateSheet = false // On ferme la feuille
+                                }
+                        }
+                }
+        }
+        
+        private func delete(at offsets: IndexSet) {
+                Task {
+                        await viewModel.deleteCandidate(at: offsets)
                 }
         }
 }
