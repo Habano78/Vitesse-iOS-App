@@ -38,6 +38,16 @@ struct RegisterView: View {
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)
                                 .focused($isInputActive)
+                                .onChange(of: viewModel.email) {
+                                        viewModel.validateEmail()
+                                }
+                        // pour afficher l'erreur
+                        if let emailError = viewModel.emailErrorMessage {
+                                Text(emailError)
+                                        .font(.caption)
+                                        .foregroundColor(.red)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                         
                         SecureField("Mot de passe", text: $viewModel.password)
                                 .focused($isInputActive)

@@ -20,6 +20,7 @@ class RegisterViewModel: ObservableObject {
         // MARK: - Propriétés d'état pour l'UI
         @Published var isLoading = false
         @Published var errorMessage: String?
+        @Published var emailErrorMessage: String?
         
         // MARK: - Dépendances & Callbacks
         private let authService: AuthenticationServiceProtocol
@@ -36,9 +37,22 @@ class RegisterViewModel: ObservableObject {
                 self.onRegisterSucceed = onRegisterSucceed
         }
         
+        //MARK: fonction de validation
+        func validateEmail() {
+                if !email.isValidEmail {
+                        emailErrorMessage = "Le format de l'email est invalide."
+                } else {
+                        emailErrorMessage = nil
+                }
+        }
+        
+        
         // MARK: - Actions
         
         func register() async {
+                // vérification de la validité de l'émail
+                validateEmail()
+                guard emailErrorMessage == nil else { return }
                 // vérification des champs
                 guard !firstName.isEmpty, !lastName.isEmpty, !email.isEmpty, !password.isEmpty else {
                         errorMessage = "Tous les champs sont obligatoires."

@@ -29,9 +29,9 @@ class AuthViewModel: ObservableObject {
         }
         
         func login() async {
-                self.isLoading = true
+                isLoading = true
                 defer { isLoading = false }
-                self.errorMessage = nil
+                errorMessage = nil
                 
                 //MARK: Préparation des données pour la requête
                 let  loginCredentials  = AuthRequestDTO(email: self.email, password: self.password)
