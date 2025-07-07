@@ -11,13 +11,16 @@ import SwiftUI
 @MainActor
 class CandidateDetailViewModel: ObservableObject {
         
-        // MARK: - Propriétés Principales
+        // MARK: Propriété Principale
         @Published var candidate: Candidate
         
-        // MARK: - Propriétés d'état pour la vue
+        // MARK: Propriétés d'état pour la vue
         @Published var isEditing: Bool = false
         @Published var isLoading: Bool = false
         @Published var errorMessage: String?
+        @Published var phoneErrorMessage: String?
+        @Published var emailErrorMessage: String?
+        
         
         //MARK: Propriétés d'édition (champs de text)
         @Published var editableFirstName: String = ""
@@ -45,7 +48,6 @@ class CandidateDetailViewModel: ObservableObject {
         }
         
         // MARK: Actions
-        
         func startEditing() {
                 self.isEditing = true
                 self.editableFirstName = candidate.firstName
@@ -56,18 +58,26 @@ class CandidateDetailViewModel: ObservableObject {
                 self.editableLinkedinURL = candidate.linkedinURL ?? ""
         }
         
-        /// Annule l'édition et revient au mode lecture.
+        //Annule l'édition et revient au mode lecture.
         func cancelEditing() {
                 self.isEditing = false
         }
         
-        /// Sauvegarde les modifications via l'API.
+        // Sauvegarde les modifications via l'API.
         func saveChanges() async {
+                /// appel aux validateurs
+                validateEmail()
+                validatePhone()
+                /// verification des erreurs en même temps
+                guard emailErrorMessage == nil && phoneErrorMessage == nil else {
+                        self.errorMessage = "Veuillez corriger les erreurs avant de sauvegarder."
+                        return
+                }
                 isLoading = true
                 errorMessage = nil
                 defer { isLoading = false }
                 
-                // 1. Crée le "payload" (DTO) à partir des données éditées
+                // Crée le "payload" (DTO) à partir des données éditées
                 let payload = CandidatePayloadDTO(
                         firstName: editableFirstName,
                         lastName: editableLastName,
@@ -78,13 +88,13 @@ class CandidateDetailViewModel: ObservableObject {
                 )
                 
                 do {
-                        // 2. Appelle le service de mise à jour
+                        // Appelle le service de mise à jour
                         let updatedCandidateDTO = try await candidateService.updateCandidate(id: candidate.id, with: payload)
                         
-                        // 3. Met à jour le modèle principal avec la réponse du serveur
+                        // Met à jour le modèle principal avec la réponse du serveur
                         self.candidate = Candidate(from: updatedCandidateDTO)
                         
-                        // 4. Quitte le mode édition
+                        // Quitte le mode édition
                         self.isEditing = false
                         
                 } catch let error as APIServiceError {
@@ -94,8 +104,8 @@ class CandidateDetailViewModel: ObservableObject {
                 }
         }
         func toggleFavoriteStatus() async {
+                errorMessage = nil /// On efface les anciens messages
                 isTogglingFavorite = true
-                errorMessage = nil // On efface les anciens messages
                 defer { isTogglingFavorite = false }
                 
                 do {
@@ -104,11 +114,30 @@ class CandidateDetailViewModel: ObservableObject {
                         print("Statut favori mis à jour pour : \(self.candidate.firstName)")
                 } catch let error as APIServiceError {
                         // On affiche les erreurs de notre service
-                        self.errorMessage = error.localizedDescription
+                        errorMessage = error.localizedDescription
                 } catch {
                         // On affiche les erreurs inattendues
-                        self.errorMessage = "Une erreur inattendue est survenue."
+                        errorMessage = "Une erreur inattendue est survenue."
                         print("Erreur toggleFavoriteStatus: \(error.localizedDescription)")
+                }
+        }
+        
+        //MARK: valider l'email
+        func validateEmail() {
+                if !editableEmail.isValidEmail {
+                        emailErrorMessage = "Le format de l'email est invalide."
+                } else {
+                        emailErrorMessage = nil
+                }
+        }
+        
+        //MARK: valider le téléphone
+        func validatePhone() {
+                // Le téléphone est optionnel, donc on ne valide que s'il n'est pas vide
+                if !editablePhone.isEmpty && !editablePhone.isValidPhoneNumber {
+                        phoneErrorMessage = "Le format du téléphone est invalide (chiffres uniquement)."
+                } else {
+                        phoneErrorMessage = nil
                 }
         }
 }

@@ -24,10 +24,11 @@ struct CandidateListView: View {
         
         var body: some View {
                 NavigationStack {
-                        List {
-                                ForEach(viewModel.candidates) { candidate in
-                                        HStack {
-                                                NavigationLink(destination: CandidateDetailView(candidate: candidate, isAdmin: self.isAdmin)) {
+                        VStack {
+                                List {
+                                       
+                                        ForEach(viewModel.candidates) { candidate in
+                                                ZStack {
                                                         HStack {
                                                                 Text("\(candidate.firstName) \(candidate.lastName)")
                                                                 Spacer()
@@ -36,19 +37,34 @@ struct CandidateListView: View {
                                                                                 .foregroundColor(.yellow)
                                                                 }
                                                         }
+
+                                                        NavigationLink(destination: CandidateDetailView(candidate: candidate, isAdmin: self.isAdmin)) {
+                                                                ///  contenu est vide pour être invisible
+                                                                EmptyView()
+                                                        }
+                                                        .opacity(0) // On le rend complètement transparent
                                                 }
+                                                .padding(.vertical, 8)
                                         }
+                                        .onDelete(perform: delete)
+                                        .onDelete(perform: delete)
                                 }
-                                .onDelete(perform: delete)
+                                .navigationDestination(for: Candidate.self) { selectedCandidate in
+                                        CandidateDetailView(candidate: selectedCandidate, isAdmin: self.isAdmin)
+                                }
                         }
+                        
+                        .listStyle(.insetGrouped)
+                        // Bouton Logout ici
+                        Button("Logout", role: .destructive) {
+                                onLogout()
+                        }
+                        .padding()
                         .navigationTitle("Candidats")
                         .navigationBarTitleDisplayMode(.inline)
                         .searchable(text: $viewModel.searchText, prompt: "Search")
                         .toolbar {
                                 ToolbarItemGroup(placement: .topBarLeading) {
-                                        Button("Logout", role: .destructive) {
-                                                onLogout()
-                                        }
                                         Button(isEditing ? "Done" : "Edit") {
                                                 withAnimation {
                                                         isEditing.toggle()
@@ -83,7 +99,6 @@ struct CandidateListView: View {
                                 }
                         }
                         .overlay {
-                                // ... votre code .overlay reste identique ...
                                 if viewModel.isLoading {
                                         ProgressView()
                                 } else if let errorMessage = viewModel.errorMessage {

@@ -25,7 +25,7 @@ class RegisterViewModel: ObservableObject {
         // MARK: - Dépendances & Callbacks
         private let authService: AuthenticationServiceProtocol
         
-        // Un simple callback pour signaler le succès à la vue parente
+        // Un callback pour signaler le succès à la vue parente
         // afin qu'elle puisse fermer l'écran d'inscription.
         let onRegisterSucceed: () -> Void
         
@@ -45,7 +45,6 @@ class RegisterViewModel: ObservableObject {
                         emailErrorMessage = nil
                 }
         }
-        
         
         // MARK: - Actions
         

@@ -34,7 +34,8 @@ class AuthViewModel: ObservableObject {
                 errorMessage = nil
                 
                 //MARK: Préparation des données pour la requête
-                let  loginCredentials  = AuthRequestDTO(email: self.email, password: self.password)
+                let trimmedEmail = self.email.trimmingCharacters(in: .whitespacesAndNewlines)
+                let loginCredentials = AuthRequestDTO(email: trimmedEmail, password: self.password)
                 
                 //MARK: Appel au Service et gérer la réponse
                 do {
@@ -42,9 +43,9 @@ class AuthViewModel: ObservableObject {
                         print("AuthenticationViewModel: Connexion réussie via le service. Token: \(userSession.token.prefix(8))")
                         self.onLoginSucceed(userSession)
                 } catch let error as APIServiceError {
-                        self.errorMessage = error.errorDescription
+                        errorMessage = error.errorDescription
                 }catch {
-                        self.errorMessage = "Erreur inattendue.Veuillez réessayer."
+                        errorMessage = "Erreur inattendue.Veuillez réessayer."
                 }
         }
 }

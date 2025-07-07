@@ -21,6 +21,8 @@ class AddCandidateViewModel: ObservableObject {
         // MARK: - Propriétés d'état pour l'UI
         @Published var isLoading = false
         @Published var errorMessage: String?
+        @Published var emailErrorMessage: String?
+        @Published var phoneErrorMessage: String?
         
         // MARK: - Dépendances & Callbacks
         private let candidateService: CandidateServiceProtocol
@@ -36,9 +38,33 @@ class AddCandidateViewModel: ObservableObject {
                 self.onCandidateAdded = onCandidateAdded
         }
         
-        // MARK: - Actions
+        //MARK: FONCTIONS DE VALIDATION
+        func validateEmail() {
+                if !email.isValidEmail {
+                        emailErrorMessage = "Le format de l'email est invalide."
+                } else {
+                        emailErrorMessage = nil
+                }
+        }
+        
+        func validatePhone() {
+                if !phone.isEmpty && !phone.isValidPhoneNumber {
+                        phoneErrorMessage = "Le format du téléphone est invalide."
+                } else {
+                        phoneErrorMessage = nil
+                }
+        }
+        
+        // MARK: Actions
         func addCandidate() async {
-                // Validation simple des champs obligatoires
+                // Appel aux validateurs de format mail et phone
+                validateEmail()
+                validatePhone()
+                guard emailErrorMessage == nil && phoneErrorMessage == nil else {
+                        errorMessage = "Veuillez corriger le format des champs obligatoires."
+                        return
+                }
+                // Validation des champs obligatoires
                 guard !firstName.isEmpty, !lastName.isEmpty, !email.isEmpty else {
                         errorMessage = "Le prénom, le nom et l'email sont obligatoires."
                         return

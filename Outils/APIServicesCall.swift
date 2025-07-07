@@ -94,11 +94,12 @@ class APIService {
                 }
                 
                 guard let httpResponse = response as? HTTPURLResponse else {
+                        
                         throw APIServiceError.unexpectedStatusCode(-1)
                 }
                 
                 guard (200...299).contains(httpResponse.statusCode) else {
-                        if httpResponse.statusCode == 401 { throw APIServiceError.tokenInvalidOrExpired }
+                        
                         throw APIServiceError.unexpectedStatusCode(httpResponse.statusCode)
                 }
                 

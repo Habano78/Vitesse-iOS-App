@@ -32,7 +32,7 @@ enum APIServiceError: Error, LocalizedError, Equatable {
                 case .unexpectedStatusCode(let statusCode):
                         return "Le serveur a répondu avec une erreur inattendue (Code: \(statusCode))."
                 case .invalidCredentials:
-                        return "Nom d'utilisateur ou mot de passe incorrect."
+                        return "Votre identifiant ou votre mot de passe est invalide. Veuillez ressayer."
                 case .tokenInvalidOrExpired:
                         return "Votre session a peut-être expiré ou votre token n'est plus valide. Veuillez vous reconnecter."
                 }

@@ -59,7 +59,16 @@ struct AuthView: View {
                                                         .textFieldStyle(.roundedBorder)
                                         }
                                 }
-                                .padding(.horizontal, 40) // 1. Padding de référence pour les champs
+                                .padding(.horizontal, 40) ///Padding pour les champs
+                        
+                                // Affichage des erreurs d'identifiants
+                                if let errorMessage = viewModel.errorMessage {
+                                        Text(errorMessage)
+                                                .foregroundColor(.red)
+                                                .font(.caption)
+                                                .multilineTextAlignment(.center)
+                                                .padding()
+                                }
                                 
                                 ///Conteneur pour les boutons
                                 VStack(spacing: 15) {
@@ -93,15 +102,7 @@ struct AuthView: View {
                                 .padding(.top, 30)
                                 
                                 Spacer() // pour pousser le contenu au centre
-                                
-                                // Affichage des erreurs en bas
-                                if let errorMessage = viewModel.errorMessage {
-                                        Text(errorMessage)
-                                                .foregroundColor(.red)
-                                                .font(.caption)
-                                                .multilineTextAlignment(.center)
-                                                .padding()
-                                }
+
                         }
                         .background(Color(.systemGroupedBackground))
                         .edgesIgnoringSafeArea(.all)

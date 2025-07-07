@@ -12,7 +12,7 @@
 		2262A4122E129056001BFB18 /* BusinessModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4112E129056001BFB18 /* BusinessModels.swift */; };
 		2262A4142E133570001BFB18 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4132E133570001BFB18 /* AuthenticationService.swift */; };
 		2262A4162E13CAAE001BFB18 /* URLSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4152E13CAAD001BFB18 /* URLSessionProtocol.swift */; };
-		2262A4182E13CBEB001BFB18 /* Errors_Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4172E13CBEB001BFB18 /* Errors_Service.swift */; };
+		2262A4182E13CBEB001BFB18 /* APIServiceErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4172E13CBEB001BFB18 /* APIServiceErrors.swift */; };
 		2262A41A2E13CEC0001BFB18 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4192E13CEC0001BFB18 /* AuthenticationViewModel.swift */; };
 		2262A41D2E13D25E001BFB18 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A41C2E13D25E001BFB18 /* AuthenticationView.swift */; };
 		2262A4222E14268F001BFB18 /* KeyChainInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4212E14268F001BFB18 /* KeyChainInterface.swift */; };
@@ -35,8 +35,8 @@
 		2262A4552E1AF76E001BFB18 /* AddCandidateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4532E1AF76E001BFB18 /* AddCandidateViewModel.swift */; };
 		2262A4572E1AF7FA001BFB18 /* AddCandidateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4562E1AF7FA001BFB18 /* AddCandidateView.swift */; };
 		2262A4582E1AF7FA001BFB18 /* AddCandidateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4562E1AF7FA001BFB18 /* AddCandidateView.swift */; };
-		2262A45A2E1BAE15001BFB18 /* EmailValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4592E1BAE15001BFB18 /* EmailValidation.swift */; };
-		2262A45B2E1BAE15001BFB18 /* EmailValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4592E1BAE15001BFB18 /* EmailValidation.swift */; };
+		2262A45A2E1BAE15001BFB18 /* Email_PhoneValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4592E1BAE15001BFB18 /* Email_PhoneValidation.swift */; };
+		2262A45B2E1BAE15001BFB18 /* Email_PhoneValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4592E1BAE15001BFB18 /* Email_PhoneValidation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,7 +65,7 @@
 		2262A4112E129056001BFB18 /* BusinessModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessModels.swift; sourceTree = "<group>"; };
 		2262A4132E133570001BFB18 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		2262A4152E13CAAD001BFB18 /* URLSessionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionProtocol.swift; sourceTree = "<group>"; };
-		2262A4172E13CBEB001BFB18 /* Errors_Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors_Service.swift; sourceTree = "<group>"; };
+		2262A4172E13CBEB001BFB18 /* APIServiceErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceErrors.swift; sourceTree = "<group>"; };
 		2262A4192E13CEC0001BFB18 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		2262A41C2E13D25E001BFB18 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		2262A4212E14268F001BFB18 /* KeyChainInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainInterface.swift; sourceTree = "<group>"; };
@@ -83,7 +83,7 @@
 		2262A4502E1AA699001BFB18 /* APIServicesCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServicesCall.swift; sourceTree = "<group>"; };
 		2262A4532E1AF76E001BFB18 /* AddCandidateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCandidateViewModel.swift; sourceTree = "<group>"; };
 		2262A4562E1AF7FA001BFB18 /* AddCandidateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCandidateView.swift; sourceTree = "<group>"; };
-		2262A4592E1BAE15001BFB18 /* EmailValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailValidation.swift; sourceTree = "<group>"; };
+		2262A4592E1BAE15001BFB18 /* Email_PhoneValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Email_PhoneValidation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -193,8 +193,8 @@
 				2262A43E2E17B906001BFB18 /* JsonEncoderProtocol.swift */,
 				2262A4502E1AA699001BFB18 /* APIServicesCall.swift */,
 				2262A44D2E1AA618001BFB18 /* HTTPMethods.swift */,
-				2262A4172E13CBEB001BFB18 /* Errors_Service.swift */,
-				2262A4592E1BAE15001BFB18 /* EmailValidation.swift */,
+				2262A4172E13CBEB001BFB18 /* APIServiceErrors.swift */,
+				2262A4592E1BAE15001BFB18 /* Email_PhoneValidation.swift */,
 			);
 			path = Outils;
 			sourceTree = "<group>";
@@ -365,7 +365,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2262A4182E13CBEB001BFB18 /* Errors_Service.swift in Sources */,
+				2262A4182E13CBEB001BFB18 /* APIServiceErrors.swift in Sources */,
 				2262A4162E13CAAE001BFB18 /* URLSessionProtocol.swift in Sources */,
 				2262A43F2E17B906001BFB18 /* JsonEncoderProtocol.swift in Sources */,
 				2262A4262E14270F001BFB18 /* AuthTokenPersistanceProtocol.swift in Sources */,
@@ -380,7 +380,7 @@
 				2262A4372E1558B2001BFB18 /* CandidateDetailView.swift in Sources */,
 				2262A4222E14268F001BFB18 /* KeyChainInterface.swift in Sources */,
 				2262A4282E143C67001BFB18 /* CandidateListViewModel.swift in Sources */,
-				2262A45B2E1BAE15001BFB18 /* EmailValidation.swift in Sources */,
+				2262A45B2E1BAE15001BFB18 /* Email_PhoneValidation.swift in Sources */,
 				2262A41A2E13CEC0001BFB18 /* AuthenticationViewModel.swift in Sources */,
 				2262A4512E1AA699001BFB18 /* APIServicesCall.swift in Sources */,
 				2262A3E22E128B17001BFB18 /* VitesseApp.swift in Sources */,
@@ -398,7 +398,7 @@
 			files = (
 				2262A4582E1AF7FA001BFB18 /* AddCandidateView.swift in Sources */,
 				2262A4402E17B906001BFB18 /* JsonEncoderProtocol.swift in Sources */,
-				2262A45A2E1BAE15001BFB18 /* EmailValidation.swift in Sources */,
+				2262A45A2E1BAE15001BFB18 /* Email_PhoneValidation.swift in Sources */,
 				2262A4552E1AF76E001BFB18 /* AddCandidateViewModel.swift in Sources */,
 				2262A4522E1AA699001BFB18 /* APIServicesCall.swift in Sources */,
 				2262A44E2E1AA618001BFB18 /* HTTPMethods.swift in Sources */,

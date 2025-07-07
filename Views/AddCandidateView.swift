@@ -34,8 +34,24 @@ struct AddCandidateView: View {
                                         TextField("Email (requis)", text: $viewModel.email)
                                                 .keyboardType(.emailAddress)
                                                 .autocapitalization(.none)
+                                                .onChange(of: viewModel.email) { viewModel.validateEmail() } ///declenche la validation
+                                        
+                                        // Affiche l'erreur du format mail
+                                        if let emailError = viewModel.emailErrorMessage {
+                                                Text(emailError)
+                                                        .font(.caption)
+                                                        .foregroundColor(.red)
+                                        }
                                         TextField("Téléphone", text: $viewModel.phone)
                                                 .keyboardType(.phonePad)
+                                                .onChange(of: viewModel.phone) { viewModel.validatePhone() }
+                                        
+                                        // Affiche l'erreur du format téléphone
+                                        if let phoneError = viewModel.phoneErrorMessage {
+                                                Text(phoneError)
+                                                        .font(.caption)
+                                                        .foregroundColor(.red)
+                                        }
                                         TextField("Profil LinkedIn", text: $viewModel.linkedinURL)
                                                 .keyboardType(.URL)
                                 }

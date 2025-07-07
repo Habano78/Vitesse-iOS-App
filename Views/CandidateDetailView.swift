@@ -88,6 +88,15 @@ struct CandidateDetailView: View {
                         }
                         .padding()
                 }
+                .navigationTitle("") // Assure que la barre de nav est vide
+                .alert("Erreur", isPresented: .constant(viewModel.errorMessage != nil), actions: {
+                        Button("OK") {
+                                // En cliquant sur OK, on efface le message pour faire disparaître l'alerte
+                                viewModel.errorMessage = nil
+                        }
+                }, message: {
+                        Text(viewModel.errorMessage ?? "Une erreur inconnue est survenue.")
+                })
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
@@ -100,40 +109,38 @@ struct CandidateDetailView: View {
         
         // MARK: Vue en Mode Édition (Utilise un Form)
         private var editableCandidateView: some View {
-                NavigationStack {
-                        Form {
-                                Section("Informations Personnelles") {
-                                        TextField("Prénom", text: $viewModel.editableFirstName)
-                                        TextField("Nom", text: $viewModel.editableLastName)
-                                }
-                                
-                                Section("Contact") {
-                                        TextField("Email", text: $viewModel.editableEmail).keyboardType(.emailAddress)
-                                        TextField("Téléphone", text: $viewModel.editablePhone).keyboardType(.phonePad)
-                                        TextField("Profil LinkedIn", text: $viewModel.editableLinkedinURL).keyboardType(.URL)
-                                }
-                                
-                                Section("Notes") {
-                                        TextEditor(text: $viewModel.editableNote)
-                                                .frame(minHeight: 150)
-                                }
-                                
-                                if let errorMessage = viewModel.errorMessage {
-                                        Section { Text(errorMessage).foregroundColor(.red) }
-                                }
+                Form {
+                        Section("Informations Personnelles") {
+                                TextField("Prénom", text: $viewModel.editableFirstName)
+                                TextField("Nom", text: $viewModel.editableLastName)
                         }
-                        .navigationTitle("\(viewModel.candidate.firstName) \(viewModel.candidate.lastName)")
-                        .navigationBarTitleDisplayMode(.inline)
-                        .toolbar {
-                                ToolbarItem(placement: .cancellationAction) {
-                                        Button("Cancel") { viewModel.cancelEditing() }
-                                }
-                                ToolbarItem(placement: .confirmationAction) {
-                                        if viewModel.isLoading {
-                                                ProgressView()
-                                        } else {
-                                                Button("Done") { Task { await viewModel.saveChanges() } }
-                                        }
+                        
+                        Section("Contact") {
+                                TextField("Email", text: $viewModel.editableEmail).keyboardType(.emailAddress)
+                                TextField("Téléphone", text: $viewModel.editablePhone).keyboardType(.phonePad)
+                                TextField("Profil LinkedIn", text: $viewModel.editableLinkedinURL).keyboardType(.URL)
+                        }
+                        
+                        Section("Notes") {
+                                TextEditor(text: $viewModel.editableNote)
+                                        .frame(minHeight: 150)
+                        }
+                        
+                        if let errorMessage = viewModel.errorMessage {
+                                Section { Text(errorMessage).foregroundColor(.red) }
+                        }
+                }
+                .navigationTitle("\(viewModel.candidate.firstName) \(viewModel.candidate.lastName)")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                                Button("Cancel") { viewModel.cancelEditing() }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                                if viewModel.isLoading {
+                                        ProgressView()
+                                } else {
+                                        Button("Done") { Task { await viewModel.saveChanges() } }
                                 }
                         }
                 }
