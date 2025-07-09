@@ -41,11 +41,18 @@ struct AuthView: View {
                                 // Conteneur pour les champs de saisie
                                 VStack(spacing: 15) {
                                         VStack(alignment: .leading) {
-                                                Text("E-mail/Username")
+                                                Text("Email/Username")
                                                         .font(.footnote)
                                                         .foregroundColor(.gray)
-                                                TextField("enter your e-mail", text: $viewModel.email)
-                                                        .textFieldStyle(.roundedBorder)
+                                                TextField("Enter your email", text: $viewModel.email)
+                                                        .padding(.horizontal)
+                                                        .frame(height: 40)
+                                                        .background(Color.white)
+                                                        .cornerRadius(8)
+                                                        .overlay(
+                                                                RoundedRectangle(cornerRadius: 8)
+                                                                        .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+                                                        )
                                                         .keyboardType(.emailAddress)
                                                         .autocapitalization(.none)
                                                         .disableAutocorrection(true)
@@ -55,13 +62,31 @@ struct AuthView: View {
                                                 Text("Password")
                                                         .font(.footnote)
                                                         .foregroundColor(.gray)
-                                                SecureField("enter your password", text: $viewModel.password)
-                                                        .textFieldStyle(.roundedBorder)
+                                                SecureField("Enter your password", text: $viewModel.password)
+                                                        .padding(.horizontal)
+                                                        .frame(height: 40)
+                                                        .background(Color.white)
+                                                        .cornerRadius(8)
+                                                        .overlay(
+                                                                RoundedRectangle(cornerRadius: 8)
+                                                                        .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+                                                        )
+                                                //MARK: FORGOT PASSWORD
+                                                HStack {
+                                                        Button("Forgot password?") {
+                                                                // Pour l'instant, l'action ne fait rien
+                                                                print("Bouton 'Mot de passe oublié' cliqué.")
+                                                                print("l'API ne fournit pas les endpoints nécessaires pour ce processus")
+                                                        }
+                                                        .font(.footnote)
+                                                        .tint(.gray) //couleur discrète
+                                                }
                                         }
                                 }
+                                .padding(.top, 30)
                                 .padding(.horizontal, 40) ///Padding pour les champs
-                        
-                                // Affichage des erreurs d'identifiants
+                                
+                                // Affichage erreurs d'identifiants
                                 if let errorMessage = viewModel.errorMessage {
                                         Text(errorMessage)
                                                 .foregroundColor(.red)
@@ -69,19 +94,21 @@ struct AuthView: View {
                                                 .multilineTextAlignment(.center)
                                                 .padding()
                                 }
-                                
-                                ///Conteneur pour les boutons
+                                Spacer()
+                                //MARK: Conteneur pour les boutons
                                 VStack(spacing: 15) {
                                         if viewModel.isLoading {
                                                 ProgressView()
                                                         .padding(.top, 20)
                                         } else {
-                                
+                                                
                                                 Button("Sign in") {
                                                         Task { await viewModel.login() }
                                                 }
                                                 .frame(maxWidth: .infinity)
                                                 .padding()
+                                                .frame(height: 40)
+                                                .frame(width: 160)
                                                 .background(Color.black)
                                                 .foregroundColor(.white)
                                                 .cornerRadius(10)
@@ -90,7 +117,9 @@ struct AuthView: View {
                                                         isShowingRegisterView = true
                                                 }
                                                 .frame(maxWidth: .infinity)
-                                                .padding()
+                                                .padding(.horizontal)
+                                                .frame(height: 35)
+                                                .frame(width: 160)
                                                 .background(
                                                         RoundedRectangle(cornerRadius: 10)
                                                                 .stroke(Color.black, lineWidth: 1.5)
@@ -102,7 +131,8 @@ struct AuthView: View {
                                 .padding(.top, 30)
                                 
                                 Spacer() // pour pousser le contenu au centre
-
+                                Spacer() // pour pousser le contenu au centre
+                                
                         }
                         .background(Color(.systemGroupedBackground))
                         .edgesIgnoringSafeArea(.all)

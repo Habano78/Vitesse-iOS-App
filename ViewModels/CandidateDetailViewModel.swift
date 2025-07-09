@@ -37,7 +37,7 @@ class CandidateDetailViewModel: ObservableObject {
         // MARK: - Dépendance
         private let candidateService: CandidateServiceProtocol
         
-        //MARK: init et injection de dépendance
+        //MARK: init et injection
         init(candidate: Candidate,
              isAdmin: Bool,
              candidateService: CandidateServiceProtocol = CandidateService()
@@ -47,15 +47,24 @@ class CandidateDetailViewModel: ObservableObject {
                 self.candidateService = candidateService
         }
         
-        // MARK: Actions
+        // MARK: Actions -- startEditing, cancelEditing, saveChanges, toggleFavoriteStatus, validateEmail, validatePhone --
+        
         func startEditing() {
-                self.isEditing = true
-                self.editableFirstName = candidate.firstName
-                self.editableLastName = candidate.lastName
-                self.editableEmail = candidate.email
-                self.editablePhone = candidate.phone ?? ""
-                self.editableNote = candidate.note ?? ""
-                self.editableLinkedinURL = candidate.linkedinURL ?? ""
+                // On passe en mode édition
+                isEditing = true
+                
+                // On copie les valeurs du candidat dans les variables éditables
+                editableFirstName = candidate.firstName
+                editableLastName = candidate.lastName
+                editableEmail = candidate.email
+                editablePhone = candidate.phone ?? ""
+                editableNote = candidate.note ?? ""
+                editableLinkedinURL = candidate.linkedinURL ?? ""
+                
+                // On s'assure que les messages d'erreur sont vides au début
+                emailErrorMessage = nil
+                phoneErrorMessage = nil
+                errorMessage = nil
         }
         
         //Annule l'édition et revient au mode lecture.
@@ -103,6 +112,7 @@ class CandidateDetailViewModel: ObservableObject {
                         self.errorMessage = "Une erreur de sauvegarde inattendue est survenue."
                 }
         }
+        //changement de statut favori
         func toggleFavoriteStatus() async {
                 errorMessage = nil /// On efface les anciens messages
                 isTogglingFavorite = true
@@ -122,7 +132,7 @@ class CandidateDetailViewModel: ObservableObject {
                 }
         }
         
-        //MARK: valider l'email
+        // valider l'email
         func validateEmail() {
                 if !editableEmail.isValidEmail {
                         emailErrorMessage = "Le format de l'email est invalide."
@@ -131,7 +141,7 @@ class CandidateDetailViewModel: ObservableObject {
                 }
         }
         
-        //MARK: valider le téléphone
+        // valider le téléphone
         func validatePhone() {
                 // Le téléphone est optionnel, donc on ne valide que s'il n'est pas vide
                 if !editablePhone.isEmpty && !editablePhone.isValidPhoneNumber {

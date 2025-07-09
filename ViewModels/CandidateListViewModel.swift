@@ -82,22 +82,37 @@ class CandidateListViewModel: ObservableObject {
                                         do {
                                                 try await self.candidateService.deleteCandidate(id: candidate.id)
                                         } catch {
-                                                // Si une suppression échoue, on peut gérer l'erreur ici.
-                                                // Par exemple, on pourrait ré-ajouter le candidat à la liste
-                                                // ou afficher une alerte spécifique.
-                                                print("La suppression de \(candidate.firstName) a échoué.")
                                                 
+                                                print("La suppression de \(candidate.firstName) a échoué.")
                                                 // Pour l'instant, on se contente d'afficher l'erreur dans la console.
-                                                // Dans une vraie app, on pourrait collecter les erreurs.
+                                        
                                         }
                                 }
                         }
                 }
         }
-        //MARK: rajouter des candidats 
+        //MARK: rajouter des candidats
         func addCandidateToList(_ candidate: Candidate) {
                 // On insère le nouveau candidat au début de notre liste source
                 allCandidates.insert(candidate, at: 0)
-            }
+        }
+        //MARK: fonction pour gérer la suppresion multiple lors de la vue édition
+        func deleteSelectedCandidates(ids: Set<UUID>) async {
+                // On met à jour l'UI d'abord pour la réactivité
+                allCandidates.removeAll { ids.contains($0.id) }
+                
+                // On lance toutes les suppressions en parallèle
+                await withTaskGroup(of: Void.self) { group in
+                        for id in ids {
+                                group.addTask {
+                                        do {
+                                                try await self.candidateService.deleteCandidate(id: id)
+                                        } catch {
+                                                print("La suppression de \(id) a échoué.")
+                                        }
+                                }
+                        }
+                }
+        }
 }
 

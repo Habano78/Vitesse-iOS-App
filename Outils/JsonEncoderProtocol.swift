@@ -1,6 +1,5 @@
 //
 //  JSONEncoderProtocol.swift
-//  AuraTests
 //
 //  Created by Perez William
 

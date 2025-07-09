@@ -8,28 +8,42 @@ import SwiftUI
 
 struct CandidateListView: View {
         
+        // MARK: - Properties
         @StateObject private var viewModel = CandidateListViewModel()
+        
+        // États locaux pour gérer l'interface
         @State private var isEditing = false
-        
-        //Nouvel état pour contrôler l'affichage de la feuille d'ajout
         @State private var isShowingAddCandidateSheet = false
+        @State private var selection = Set<UUID>()
+        // état pour déclencher la navigation manuellement
+        @State private var candidateToNavigate: Candidate?
         
+        // Propriétés reçues de la vue parente
         let isAdmin: Bool
         let onLogout: () -> Void
         
+        
+        // MARK: - Init
         init(isAdmin: Bool, onLogout: @escaping () -> Void) {
                 self.isAdmin = isAdmin
                 self.onLogout = onLogout
         }
         
+        // MARK: Body
         var body: some View {
                 NavigationStack {
-                        VStack {
+                        VStack(spacing: 0) {
+                                // La liste utilise la variable "selection" pour gérer les sélections en mode édition
                                 List {
-                                       
                                         ForEach(viewModel.candidates) { candidate in
-                                                ZStack {
+                                                // NavigationLink passe la "valeur" candidate
+                                                NavigationLink(value: candidate) {
                                                         HStack {
+                                                                if isEditing {
+                                                                        Image(systemName: selection.contains(candidate.id) ? "checkmark.circle.fill" : "circle")
+                                                                                .font(.title2)
+                                                                                .foregroundColor(.accentColor)
+                                                                }
                                                                 Text("\(candidate.firstName) \(candidate.lastName)")
                                                                 Spacer()
                                                                 if candidate.isFavorite {
@@ -37,59 +51,44 @@ struct CandidateListView: View {
                                                                                 .foregroundColor(.yellow)
                                                                 }
                                                         }
-
-                                                        NavigationLink(destination: CandidateDetailView(candidate: candidate, isAdmin: self.isAdmin)) {
-                                                                ///  contenu est vide pour être invisible
-                                                                EmptyView()
-                                                        }
-                                                        .opacity(0) // On le rend complètement transparent
                                                 }
                                                 .padding(.vertical, 8)
-                                        }
-                                        .onDelete(perform: delete)
-                                        .onDelete(perform: delete)
-                                }
-                                .navigationDestination(for: Candidate.self) { selectedCandidate in
-                                        CandidateDetailView(candidate: selectedCandidate, isAdmin: self.isAdmin)
-                                }
-                        }
-                        
-                        .listStyle(.insetGrouped)
-                        // Bouton Logout ici
-                        Button("Logout", role: .destructive) {
-                                onLogout()
-                        }
-                        .padding()
-                        .navigationTitle("Candidats")
-                        .navigationBarTitleDisplayMode(.inline)
-                        .searchable(text: $viewModel.searchText, prompt: "Search")
-                        .toolbar {
-                                ToolbarItemGroup(placement: .topBarLeading) {
-                                        Button(isEditing ? "Done" : "Edit") {
-                                                withAnimation {
-                                                        isEditing.toggle()
+                                                .onTapGesture {
+                                                        if isEditing {
+                                                                toggleSelection(for: candidate)
+                                                        } else {
+                                                                // En mode normal, on définit quel candidat on veut voir
+                                                                candidateToNavigate = candidate
+                                                        }
                                                 }
+                                        }
+                                }
+                                .listStyle(.insetGrouped)
+                                // Ce modificateur reçoit la "valeur" de la NavigationLink et déclenche la navigation
+                                .navigationDestination(for: Candidate.self) { candidate in
+                                        if !isEditing {
+                                                CandidateDetailView(candidate: candidate, isAdmin: isAdmin)
                                         }
                                 }
                                 
-                                // On regroupe les boutons de droite
-                                ToolbarItemGroup(placement: .topBarTrailing) {
-                                        // Le bouton "+" ne s'affiche que pour les admins
-                                        if isAdmin {
-                                                Button {
-                                                        isShowingAddCandidateSheet = true
-                                                } label: {
-                                                        Image(systemName: "plus")
-                                                }
-                                        }
-                                        
-                                        // Le bouton pour filtrer les favoris
-                                        Button {
-                                                viewModel.isFavoritesFilterActive.toggle()
-                                        } label: {
-                                                Image(systemName: viewModel.isFavoritesFilterActive ? "star.fill" : "star")
-                                        }
-                                        .tint(.yellow)
+                                // Bouton de déconnexion en bas de l'écran
+                                Button("Logout", role: .destructive) {
+                                        onLogout()
+                                }
+                                .padding()
+                        }
+                        .navigationTitle("")
+                        .navigationDestination(item: $candidateToNavigate) { candidate in
+                                CandidateDetailView(candidate: candidate, isAdmin: isAdmin)
+                        }
+                        .navigationBarTitleDisplayMode(.inline)
+                        .searchable(text: $viewModel.searchText, prompt: "Search")
+                        .toolbar {
+                                // Affiche la barre d'outils correspondante au mode actuel
+                                if isEditing {
+                                        editingToolbar
+                                } else {
+                                        defaultToolbar
                                 }
                         }
                         .environment(\.editMode, .constant(isEditing ? .active : .inactive))
@@ -99,30 +98,92 @@ struct CandidateListView: View {
                                 }
                         }
                         .overlay {
-                                if viewModel.isLoading {
-                                        ProgressView()
-                                } else if let errorMessage = viewModel.errorMessage {
+                                // Affiche les états de chargement, d'erreur ou de liste vide
+                                if viewModel.isLoading { ProgressView() }
+                                else if let errorMessage = viewModel.errorMessage {
                                         ContentUnavailableView("Erreur", systemImage: "wifi.slash", description: Text(errorMessage))
-                                } else if viewModel.candidates.isEmpty && !viewModel.searchText.isEmpty {
+                                }
+                                else if viewModel.candidates.isEmpty && !viewModel.searchText.isEmpty {
                                         ContentUnavailableView.search
-                                } else if viewModel.candidates.isEmpty {
+                                }
+                                else if viewModel.candidates.isEmpty {
                                         ContentUnavailableView("Aucun Candidat", systemImage: "person.3.fill")
                                 }
                         }
-                        // 3. On attache la feuille modale ici
                         .sheet(isPresented: $isShowingAddCandidateSheet) {
                                 AddCandidateView { newCandidate in
-                                        // Ce code est exécuté quand un candidat est ajouté avec succès
                                         viewModel.addCandidateToList(newCandidate)
-                                        isShowingAddCandidateSheet = false // On ferme la feuille
+                                        isShowingAddCandidateSheet = false
                                 }
                         }
                 }
         }
         
-        private func delete(at offsets: IndexSet) {
-                Task {
-                        await viewModel.deleteCandidate(at: offsets)
+        // MARK: - Toolbar Views
+        
+        /// Barre d'outils pour le mode de lecture normal.
+        @ToolbarContentBuilder
+        private var defaultToolbar: some ToolbarContent {
+                ToolbarItemGroup(placement: .topBarLeading) {
+                        Button("Edit") {
+                                withAnimation { isEditing = true }
+                        }
+                }
+                
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                        if isAdmin {
+                                Button { isShowingAddCandidateSheet = true } label: { Image(systemName: "plus") }
+                        }
+                        Button { viewModel.isFavoritesFilterActive.toggle() } label: {
+                                Image(systemName: viewModel.isFavoritesFilterActive ? "star.fill" : "star")
+                        }
+                        .tint(.yellow)
                 }
         }
+        
+        /// Barre d'outils pour le mode d'édition.
+        @ToolbarContentBuilder
+        private var editingToolbar: some ToolbarContent {
+                ToolbarItem(placement: .topBarLeading) {
+                        Button("Cancel") {
+                                withAnimation {
+                                        isEditing = false
+                                        selection.removeAll()
+                                }
+                        }
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                        Button("Delete", role: .destructive) {
+                                Task {
+                                        await viewModel.deleteSelectedCandidates(ids: selection)
+                                        withAnimation {
+                                                isEditing = false
+                                                selection.removeAll()
+                                        }
+                                }
+                        }
+                        .disabled(selection.isEmpty)
+                }
+        }
+        
+        // MARK: - Helper Functions
+        
+        /// Ajoute ou retire un candidat du set de sélection.
+        private func toggleSelection(for candidate: Candidate) {
+                let candidateID = candidate.id
+                if selection.contains(candidateID) {
+                        selection.remove(candidateID)
+                } else {
+                        selection.insert(candidateID)
+                }
+        }
+}
+
+// MARK: - Preview
+
+#Preview {
+        CandidateListView(isAdmin: true, onLogout: {
+                print("Logout action triggered in preview.")
+        })
 }

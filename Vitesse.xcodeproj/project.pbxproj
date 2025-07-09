@@ -139,9 +139,9 @@
 				2262A40D2E128FFC001BFB18 /* Services */,
 				2262A4202E142608001BFB18 /* PersistanceSecure */,
 				2262A40E2E129008001BFB18 /* Outils */,
-				2262A3E02E128B17001BFB18 /* Vitesse */,
 				2262A3F12E128B19001BFB18 /* VitesseTests */,
 				2262A3FB2E128B19001BFB18 /* VitesseUITests */,
+				2262A3E02E128B17001BFB18 /* Vitesse */,
 				2262A3DF2E128B17001BFB18 /* Products */,
 			);
 			sourceTree = "<group>";

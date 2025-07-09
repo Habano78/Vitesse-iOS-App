@@ -21,7 +21,7 @@ protocol AuthenticationServiceProtocol {
 // MARK: - Authentication Service Implementation
 class AuthService: APIService, AuthenticationServiceProtocol {
         
-        // Pas de propriétés ni d'init, tout est hérité de APIService !
+        // Pas de propriétés ni d'init, tout est hérité de APIService
         
         func login(credentials: AuthRequestDTO) async throws -> AuthResponseDTO {
                 do {

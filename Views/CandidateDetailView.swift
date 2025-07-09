@@ -9,75 +9,109 @@ import SwiftUI
 struct CandidateDetailView: View {
         
         @StateObject private var viewModel: CandidateDetailViewModel
+        @FocusState private var isEditingFocus: Bool // Pour gérer le clavier en mode édition
         
         let isAdmin: Bool
         
         init(candidate: Candidate, isAdmin: Bool) {
                 self.isAdmin = isAdmin
-                _viewModel = StateObject(wrappedValue: CandidateDetailViewModel(
-                        candidate: candidate,
-                        isAdmin: isAdmin
-                ))
+                _viewModel = StateObject(wrappedValue: CandidateDetailViewModel(candidate: candidate, isAdmin: isAdmin))
         }
         
         var body: some View {
-                // En mode édition, on utilise la vue avec les champs de texte
-                if viewModel.isEditing {
-                        editableCandidateView
-                } else {
-                        // En mode lecture, on utilise la vue personnalisée
-                        readOnlyCandidateView
+                Group {
+                        if viewModel.isEditing {
+                                editableCandidateView
+                        } else {
+                                readOnlyCandidateView
+                        }
                 }
+                .navigationTitle(viewModel.isEditing ? "Édition" : "")
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarBackButtonHidden(viewModel.isEditing)
+                .toolbar {
+                        if viewModel.isEditing {
+                                editingToolbar
+                        } else {
+                                readingToolbar
+                        }
+                }
+                .alert("Erreur", isPresented: .constant(viewModel.errorMessage != nil), actions: {
+                        Button("OK") { viewModel.errorMessage = nil }
+                }, message: {
+                        Text(viewModel.errorMessage ?? "Une erreur est survenue.")
+                })
         }
         
-        // MARK: - Vue en Mode Lecture (Conforme au Wireframe)
+        // MARK: - Vue en Mode Lecture (Version finale corrigée)
         private var readOnlyCandidateView: some View {
                 ScrollView {
-                        VStack(alignment: .leading, spacing: 25) {
-                                // Grand titre avec le nom et le bouton favori
-                                HStack {
+                        // Conteneur principal centré et limité en largeur
+                        VStack(alignment: .leading, spacing: 50) {
+                                
+                                // En-tête
+                                HStack(alignment: .top) {
                                         Text("\(viewModel.candidate.firstName) \(viewModel.candidate.lastName)")
                                                 .font(.largeTitle)
                                                 .fontWeight(.bold)
-                                        Spacer()
                                         
-                                        // Bouton favori, conditionné par le statut admin
+                                        Spacer()
+                                        //
                                         Button {
                                                 Task { await viewModel.toggleFavoriteStatus() }
                                         } label: {
                                                 Image(systemName: viewModel.candidate.isFavorite ? "star.fill" : "star")
-                                                        .foregroundColor(.yellow)
                                                         .font(.title2)
                                         }
-                                        .disabled(!viewModel.isAdmin)
+                                        .tint(.yellow)
+                                        .disabled(!isAdmin)
                                 }
                                 
-                                // Section Contact
-                                VStack(alignment: .leading, spacing: 15) {
-                                        if let phone = viewModel.candidate.phone, !phone.isEmpty {
-                                                detailRow(label: "Phone", value: phone)
+                                // --- Infos personnelles ---
+                                Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 18) {
+                                        GridRow {
+                                                Text("Phone")
+                                                        .font(.headline)
+                                                Text(viewModel.candidate.phone ?? "Non renseigné")
+                                                        .foregroundColor(.secondary)
                                         }
-                                        detailRow(label: "Email", value: viewModel.candidate.email)
                                         
-                                        if let urlString = viewModel.candidate.linkedinURL, let url = URL(string: urlString) {
-                                                // Le bouton pour ouvrir LinkedIn
-                                                Link(destination: url) {
-                                                        Text("Go on LinkedIn")
-                                                                .font(.headline)
-                                                                .frame(maxWidth: 150)
-                                                                .padding(8)
-                                                                .background(Color.blue.opacity(0.1))
-                                                                .foregroundColor(.blue)
-                                                                .cornerRadius(8)
+                                        GridRow {
+                                                Text("Email")
+                                                        .font(.headline)
+                                                Text(viewModel.candidate.email)
+                                                        .foregroundColor(.secondary)
+                                        }
+                                        
+                                        GridRow(alignment: .center) {
+                                                Text("LinkedIn")
+                                                        .font(.headline)
+                                                
+                                                if let urlString = viewModel.candidate.linkedinURL,
+                                                   !urlString.isEmpty,
+                                                   let url = URL(string: urlString) {
+                                                        Link(destination: url) {
+                                                                Text("Go on LinkedIn")
+                                                                        .font(.subheadline)
+                                                                        .padding(.horizontal, 12)
+                                                                        .padding(.vertical, 6)
+                                                                        .background(
+                                                                                RoundedRectangle(cornerRadius: 8)
+                                                                                        .stroke(Color.blue, lineWidth: 1)
+                                                                        )
+                                                        }
+                                                } else {
+                                                        Text("Non renseigné")
+                                                                .foregroundColor(.secondary)
                                                 }
                                         }
+                                        
                                 }
                                 
-                                // Section Notes
-                                VStack(alignment: .leading) {
+                                // --- Notes ---
+                                VStack(alignment: .leading, spacing: 8) {
                                         Text("Note")
                                                 .font(.headline)
-                                                .padding(.bottom, 5)
                                         
                                         Text(viewModel.candidate.note ?? "Aucune note")
                                                 .padding()
@@ -86,74 +120,122 @@ struct CandidateDetailView: View {
                                                 .cornerRadius(8)
                                 }
                         }
+                        .frame(maxWidth: 330) // 👈 même largeur que "Note"
                         .padding()
+                        .background(Color.clear) // utile si tu veux tester en debug
                 }
-                .navigationTitle("") // Assure que la barre de nav est vide
-                .alert("Erreur", isPresented: .constant(viewModel.errorMessage != nil), actions: {
-                        Button("OK") {
-                                // En cliquant sur OK, on efface le message pour faire disparaître l'alerte
-                                viewModel.errorMessage = nil
-                        }
-                }, message: {
-                        Text(viewModel.errorMessage ?? "Une erreur inconnue est survenue.")
-                })
+                
+                // On s'assure que la barre de navigation est vide pour laisser place au titre dans la vue
+                .navigationTitle("")
                 .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                                Button("Edit") {
-                                        viewModel.startEditing()
-                                }
-                        }
-                }
         }
         
-        // MARK: Vue en Mode Édition (Utilise un Form)
         private var editableCandidateView: some View {
-                Form {
-                        Section("Informations Personnelles") {
-                                TextField("Prénom", text: $viewModel.editableFirstName)
-                                TextField("Nom", text: $viewModel.editableLastName)
-                        }
-                        
-                        Section("Contact") {
-                                TextField("Email", text: $viewModel.editableEmail).keyboardType(.emailAddress)
-                                TextField("Téléphone", text: $viewModel.editablePhone).keyboardType(.phonePad)
-                                TextField("Profil LinkedIn", text: $viewModel.editableLinkedinURL).keyboardType(.URL)
-                        }
-                        
-                        Section("Notes") {
-                                TextEditor(text: $viewModel.editableNote)
-                                        .frame(minHeight: 150)
-                        }
-                        
-                        if let errorMessage = viewModel.errorMessage {
-                                Section { Text(errorMessage).foregroundColor(.red) }
-                        }
-                }
-                .navigationTitle("\(viewModel.candidate.firstName) \(viewModel.candidate.lastName)")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                                Button("Cancel") { viewModel.cancelEditing() }
-                        }
-                        ToolbarItem(placement: .confirmationAction) {
-                                if viewModel.isLoading {
-                                        ProgressView()
-                                } else {
-                                        Button("Done") { Task { await viewModel.saveChanges() } }
+                ScrollView {
+                        VStack(alignment: .leading, spacing: 24) {
+                                
+                                // Nom complet affiché comme titre (lecture seule)
+                                Text("\(viewModel.candidate.firstName) \(viewModel.candidate.lastName)")
+                                        .font(.title)
+                                        .fontWeight(.bold)
+                                        .padding(.horizontal)
+                                        .padding(.top)
+                                
+                                // Champ téléphone
+                                VStack(alignment: .leading, spacing: 6) {
+                                        Text("Phone")
+                                                .font(.headline)
+                                        TextField("Phone", text: $viewModel.editablePhone)
+                                                .textFieldStyle(.roundedBorder)
                                 }
+                                .padding(.horizontal)
+                                
+                                // Champ e-mail
+                                VStack(alignment: .leading, spacing: 6) {
+                                        Text("Email")
+                                                .font(.headline)
+                                        TextField("Email", text: $viewModel.editableEmail)
+                                                .keyboardType(.emailAddress)
+                                                .autocapitalization(.none)
+                                                .textFieldStyle(.roundedBorder)
+                                                .onChange(of: viewModel.editableEmail) {
+                                                        viewModel.validateEmail()
+                                                }
+                                        
+                                        if let emailError = viewModel.emailErrorMessage {
+                                                Text(emailError)
+                                                        .font(.caption)
+                                                        .foregroundColor(.red)
+                                        }
+                                }
+                                .padding(.horizontal)
+                                
+                                // Champ LinkedIn
+                                VStack(alignment: .leading, spacing: 6) {
+                                        Text("LinkedIn")
+                                                .font(.headline)
+                                        TextField("LinkedIn URL", text: $viewModel.editableLinkedinURL)
+                                                .textFieldStyle(.roundedBorder)
+                                }
+                                .padding(.horizontal)
+                                
+                                // Champ Note
+                                VStack(alignment: .leading, spacing: 6) {
+                                        Text("Note")
+                                                .font(.headline)
+                                        TextEditor(text: $viewModel.editableNote)
+                                                .padding(8)
+                                                .frame(minHeight: 120)
+                                                .background(Color(.secondarySystemBackground))
+                                                .cornerRadius(10)
+                                }
+                                .padding(.horizontal)
                         }
+                        .padding(.top)
                 }
         }
         
-        //  fonction d'aide pour éviter la répétition
-        @ViewBuilder
-        private func detailRow(label: String, value: String) -> some View {
-                VStack(alignment: .leading) {
-                        Text(label)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        Text(value)
+        // MARK: - Toolbars
+        @ToolbarContentBuilder
+        private var readingToolbar: some ToolbarContent {
+                ToolbarItem(placement: .topBarTrailing) {
+                        Button("Edit") { viewModel.startEditing() }
                 }
+        }
+        
+        @ToolbarContentBuilder
+        private var editingToolbar: some ToolbarContent {
+                ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") { viewModel.cancelEditing() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                        if viewModel.isLoading {
+                                ProgressView()
+                        } else {
+                                Button("Done") { Task { await viewModel.saveChanges() } }
+                                        .disabled(viewModel.emailErrorMessage != nil || viewModel.phoneErrorMessage != nil)
+                        }
+                }
+        }
+}
+
+//MARK: Preview
+#Preview {
+        NavigationStack {
+                CandidateDetailView(
+                        candidate: Candidate(
+                                from: .init(
+                                        id: UUID(),
+                                        firstName: "Marie",
+                                        lastName: "Curie",
+                                        email: "marie@curie.fr",
+                                        phone: "0123456789",
+                                        note: "Physicienne et chimiste, pionnière dans le domaine de la radioactivité.Physicienne et chimiste, pionnière dans le domaine de la radioactivité. Physicienne et chimiste, pionnière dans le domaine de la radioactivité",
+                                        linkedinURL: "https://linkedin.com/in/mariecurie",
+                                        isFavorite: true
+                                )
+                        ),
+                        isAdmin: true // On peut tester les deux cas
+                )
         }
 }
