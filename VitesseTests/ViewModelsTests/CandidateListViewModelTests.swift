@@ -145,4 +145,69 @@ struct CandidateListViewModelTests {
                 #expect(viewModel.candidates.isEmpty == true)
                 #expect(viewModel.errorMessage == expectedError.localizedDescription)
         }
+        
+        @Test("addCandidateToList doit ajouter un candidat au début de la liste")
+        func testAddCandidateToList() async {
+                // Arrange
+                // On charge le ViewModel avec une liste initiale
+                mockCandidateService.fetchCandidatesResult = .success([candidate1])
+                await viewModel.fetchCandidates()
+                
+                // On s'assure que l'état initial est correct
+                #expect(viewModel.candidates.count == 1)
+                
+                // Le nouveau candidat à ajouter
+                let newCandidate = Candidate(from: candidate2)
+                
+                // Act
+                viewModel.addCandidateToList(newCandidate)
+                
+                // Assert
+                #expect(viewModel.candidates.count == 2)
+                #expect(viewModel.candidates.first?.id == newCandidate.id, "Le nouveau candidat doit être le premier de la liste.")
+        }
+        
+        @Test("deleteSelectedCandidates doit supprimer les candidats et appeler le service")
+        func testDeleteSelectedCandidates_succeeds() async {
+                // Arrange
+                mockCandidateService.fetchCandidatesResult = .success([candidate1, candidate2, candidate3])
+                await viewModel.fetchCandidates()
+                
+                // On s'assure que l'état initial est correct
+                #expect(viewModel.candidates.count == 3)
+                
+                let idsToDelete: Set<UUID> = [candidate1.id, candidate3.id]
+                
+                // On configure le mock pour que la suppression réussisse
+                mockCandidateService.deleteCandidateResult = .success(())
+                
+                // Act
+                await viewModel.deleteSelectedCandidates(ids: idsToDelete)
+                
+                // Assert
+                #expect(viewModel.candidates.count == 1, "Il ne devrait rester qu'un seul candidat.")
+                #expect(viewModel.candidates.first?.id == candidate2.id)
+                #expect(mockCandidateService.deleteCandidateCallCount == 2, "Le service de suppression aurait dû être appelé 2 fois.")
+                #expect(viewModel.errorMessage == nil)
+        }
+        
+        
+        @Test("deleteSelectedCandidates doit définir un message d'erreur en cas d'échec")
+        func testDeleteSelectedCandidates_whenAPIFails_shouldSetErrorMessage() async {
+                // Arrange
+                mockCandidateService.fetchCandidatesResult = .success([candidate1, candidate2])
+                await viewModel.fetchCandidates()
+                
+                let idsToDelete: Set<UUID> = [candidate1.id]
+                
+                // On configure le mock pour que la suppression échoue
+                mockCandidateService.deleteCandidateResult = .failure(APIServiceError.unexpectedStatusCode(500))
+                
+                // Act
+                await viewModel.deleteSelectedCandidates(ids: idsToDelete)
+                
+                // Assert
+                #expect(viewModel.candidates.count == 1, "La liste UI doit être mise à jour même en cas d'échec.")
+                #expect(viewModel.errorMessage == "La suppression d'au moins un candidat a échoué. Veuillez rafraîchir.")
+        }
 }

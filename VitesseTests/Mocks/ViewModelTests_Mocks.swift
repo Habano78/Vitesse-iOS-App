@@ -57,17 +57,20 @@ class MockCandidateService: CandidateServiceProtocol {
         var deleteCandidateResult: Result<Void, Error> = .success(())
         var toggleFavoriteResult: Result<CandidateResponseDTO, Error>?
         var updateCandidateResult: Result<CandidateResponseDTO, Error>?
+        var createCandidateResult: Result<CandidateResponseDTO, Error>?
         
         // MARK: - Propriétés "Espions"
         var fetchCandidatesCallCount = 0
         var deleteCandidateCallCount = 0
         var toggleFavoriteCallCount = 0
         var updateCandidateCallCount = 0
+        var createCandidateCallCount = 0
         
         var receivedCandidateIDForDelete: UUID?
         var receivedCandidateIDForToggle: UUID?
         var receivedCandidateIDForUpdate: UUID?
         var receivedPayloadForUpdate: CandidatePayloadDTO?
+        var receivedPayloadForCreate: CandidatePayloadDTO?
         
         // MARK: - Implémentation du Protocole
         
@@ -102,6 +105,19 @@ class MockCandidateService: CandidateServiceProtocol {
                 // Par défaut, on lance une erreur si aucun résultat n'est configuré.
                 throw APIServiceError.unexpectedStatusCode(500)
         }
+        @MainActor
+        func createCandidate(with payload: CandidatePayloadDTO) async throws -> CandidateResponseDTO {
+                createCandidateCallCount += 1
+                receivedPayloadForCreate = payload
+                
+                if let result = createCandidateResult {
+                        return try result.get()
+                }
+                
+                // Par défaut, on lance une erreur si aucun résultat n'est configuré.
+                throw APIServiceError.unexpectedStatusCode(500)
+        }
+        
 }
 
 //MARK: MOCK pour délibérément faire échouer l'encodeur et tester invalidURL

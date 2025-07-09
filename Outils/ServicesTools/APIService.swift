@@ -27,14 +27,14 @@ class APIService {
                 self.jsonEncoder = JSONEncoder()
         }
         
-        // CAS 1: Pour les appels qui attendent une réponse à décoder.
+        //Pour les appels qui attendent une réponse à décoder.
         func performRequest<T: Decodable>(
                 to endpoint: String,
                 method: HTTPMethod,
                 payload: (any Encodable)? = nil,
                 needsAuth: Bool = true
         ) async throws -> T {
-                // Le coeur de la logique est dans la méthode privée.
+               
                 let (data, _) = try await performBaseRequest(to: endpoint, method: method, payload: payload, needsAuth: needsAuth)
                 
                 do {
@@ -45,12 +45,12 @@ class APIService {
                 }
         }
         
-        // CAS 2: Pour les appels qui n'attendent PAS de réponse à décoder (DELETE, ou POST comme `register`).
+        // Pour les appels qui n'attendent PAS de réponse à décoder (DELETE, ou POST comme `register`).
         // La seule différence est qu'on ne décode rien à la fin.
         func performRequest(
                 to endpoint: String,
                 method: HTTPMethod,
-                payload: (any Encodable)? = nil, // <-- LE CHANGEMENT IMPORTANT EST ICI
+                payload: (any Encodable)? = nil,
                 needsAuth: Bool = true
         ) async throws {
                 // On exécute la requête, mais on ignore la `data` retournée.

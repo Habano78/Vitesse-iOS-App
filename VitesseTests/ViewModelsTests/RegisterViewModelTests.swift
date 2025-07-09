@@ -68,7 +68,9 @@ struct RegisterViewModelTests {
                 let mockAuthService = MockAuthService()
                 let viewModel = RegisterViewModel(authService: mockAuthService, onRegisterSucceed: {})
                 
-                viewModel.firstName = "Test" // On laisse les autres champs vides
+                viewModel.firstName = "Test"
+                viewModel.email = "test@valide.com" // ✅ On met un email valide
+                // On laisse lastName, password, etc., vides
                 
                 // Act
                 await viewModel.register()

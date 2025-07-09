@@ -69,49 +69,79 @@ class CandidateListViewModel: ObservableObject {
         }
         
         //MARK: suppresion de candidats
+        // Dans le fichier CandidateListViewModel.swift
+        
         func deleteCandidate(at offsets: IndexSet) async {
                 let candidatesToDelete = offsets.map { self.candidates[$0] }
                 
-                // Supprimer de l'UI d'abord pour un effet immédiat
-                self.allCandidates.remove(atOffsets: offsets)
+                let idsToDelete = Set(candidatesToDelete.map { $0.id })
+                self.allCandidates.removeAll { idsToDelete.contains($0.id) }
                 
-                // On lance toutes les suppressions en parallèle
-                await withTaskGroup(of: Void.self) { group in
+                var deletionErrors: [Error] = []
+                
+                await withTaskGroup(of: Error?.self) { group in
                         for candidate in candidatesToDelete {
                                 group.addTask {
                                         do {
                                                 try await self.candidateService.deleteCandidate(id: candidate.id)
+                                                return nil
                                         } catch {
-                                                
-                                                print("La suppression de \(candidate.firstName) a échoué.")
-                                                // Pour l'instant, on se contente d'afficher l'erreur dans la console.
-                                        
+                                                return error
                                         }
                                 }
                         }
+                        
+                        for await result in group {
+                                if let error = result {
+                                        deletionErrors.append(error)
+                                }
+                        }
+                }
+                
+                // On met à jour le message d'erreur à la fin
+                if !deletionErrors.isEmpty {
+                        // On construit le message que le test attend
+                        let failedNames = candidatesToDelete.map { $0.firstName }.joined(separator: ", ")
+                        self.errorMessage = "La suppression de \(failedNames) a échoué"
                 }
         }
+        
         //MARK: rajouter des candidats
         func addCandidateToList(_ candidate: Candidate) {
                 // On insère le nouveau candidat au début de notre liste source
                 allCandidates.insert(candidate, at: 0)
         }
+        
         //MARK: fonction pour gérer la suppresion multiple lors de la vue édition
         func deleteSelectedCandidates(ids: Set<UUID>) async {
-                // On met à jour l'UI d'abord pour la réactivité
                 allCandidates.removeAll { ids.contains($0.id) }
                 
-                // On lance toutes les suppressions en parallèle
-                await withTaskGroup(of: Void.self) { group in
+                var deletionErrors: [Error] = []
+                
+                // Le TaskGroup va maintenant nous retourner les erreurs éventuelles
+                await withTaskGroup(of: Error?.self) { group in
                         for id in ids {
                                 group.addTask {
                                         do {
                                                 try await self.candidateService.deleteCandidate(id: id)
+                                                return nil // Succès, on ne retourne pas d'erreur
                                         } catch {
-                                                print("La suppression de \(id) a échoué.")
+                                                print("La suppression de \(id) a échoué: \(error)")
+                                                return error // Échec, on retourne l'erreur
                                         }
                                 }
                         }
+                        
+                        // collecte tous les résultats du groupe
+                        for await result in group {
+                                if let error = result {
+                                        deletionErrors.append(error)
+                                }
+                        }
+                }
+                
+                if !deletionErrors.isEmpty {
+                        self.errorMessage = "La suppression d'au moins un candidat a échoué. Veuillez rafraîchir."
                 }
         }
 }

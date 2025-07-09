@@ -66,15 +66,15 @@ struct CandidateDetailViewModelTests {
                 let viewModel = CandidateDetailViewModel(candidate: candidate, isAdmin: true, candidateService: mockService)
                 
                 let updatedDTO = CandidateResponseDTO(
-                            id: candidate.id,
-                            firstName: "Marie-Updated",
-                            lastName: "Curie",
-                            email: candidate.email,
-                            phone: candidate.phone,
-                            note: "Note mise à jour",
-                            linkedinURL: candidate.linkedinURL,
-                            isFavorite: candidate.isFavorite
-                        )
+                        id: candidate.id,
+                        firstName: "Marie-Updated",
+                        lastName: "Curie",
+                        email: candidate.email,
+                        phone: candidate.phone,
+                        note: "Note mise à jour",
+                        linkedinURL: candidate.linkedinURL,
+                        isFavorite: candidate.isFavorite
+                )
                 mockService.updateCandidateResult = .success(updatedDTO)
                 
                 viewModel.startEditing()
@@ -132,15 +132,15 @@ struct CandidateDetailViewModelTests {
                 let viewModel = CandidateDetailViewModel(candidate: candidate, isAdmin: true, candidateService: mockService)
                 
                 var updatedDTO = CandidateResponseDTO(
-                            id: candidate.id,
-                            firstName: candidate.firstName,
-                            lastName: candidate.lastName,
-                            email: candidate.email,
-                            phone: candidate.phone,
-                            note: candidate.note,
-                            linkedinURL: candidate.linkedinURL,
-                            isFavorite: false
-                        )
+                        id: candidate.id,
+                        firstName: candidate.firstName,
+                        lastName: candidate.lastName,
+                        email: candidate.email,
+                        phone: candidate.phone,
+                        note: candidate.note,
+                        linkedinURL: candidate.linkedinURL,
+                        isFavorite: false
+                )
                 updatedDTO.isFavorite = true
                 mockService.toggleFavoriteResult = .success(updatedDTO)
                 
@@ -165,18 +165,65 @@ struct CandidateDetailViewModelTests {
                 // Assert
                 #expect(candidate.isFavorite == false)
         }
-
+        
         @Test("Vérifie que le statut isAdmin est correctement initialisé")
         func testIsAdmin_isCorrectlySet() {
-            // Arrange
-            let candidate = createCompleteCandidate()
-
-            // Act
-            let adminViewModel = CandidateDetailViewModel(candidate: candidate, isAdmin: true)
-            let nonAdminViewModel = CandidateDetailViewModel(candidate: candidate, isAdmin: false)
-
-            // Assert
-            #expect(adminViewModel.isAdmin == true, "Le ViewModel admin doit avoir isAdmin = true")
-            #expect(nonAdminViewModel.isAdmin == false, "Le ViewModel non-admin doit avoir isAdmin = false")
+                // Arrange
+                let candidate = createCompleteCandidate()
+                
+                // Act
+                let adminViewModel = CandidateDetailViewModel(candidate: candidate, isAdmin: true)
+                let nonAdminViewModel = CandidateDetailViewModel(candidate: candidate, isAdmin: false)
+                
+                // Assert
+                #expect(adminViewModel.isAdmin == true, "Le ViewModel admin doit avoir isAdmin = true")
+                #expect(nonAdminViewModel.isAdmin == false, "Le ViewModel non-admin doit avoir isAdmin = false")
         }
+        
+        @Test("toggleFavoriteStatus doit définir un message d'erreur en cas d'échec de l'API")
+        func testToggleFavoriteStatus_whenAPIFails_shouldSetErrorMessage() async {
+                // Arrange
+                let mockService = MockCandidateService()
+                let initialCandidate = createCompleteCandidate()
+                let viewModel = CandidateDetailViewModel(candidate: initialCandidate, isAdmin: true, candidateService: mockService)
+                
+                // On configure le mock pour qu'il échoue avec une erreur spécifique
+                let expectedError = APIServiceError.tokenInvalidOrExpired
+                mockService.toggleFavoriteResult = .failure(expectedError)
+                
+                // Act
+                await viewModel.toggleFavoriteStatus()
+                
+                // Assert
+                // On vérifie que le message d'erreur est bien celui de l'erreur API
+                #expect(viewModel.errorMessage == expectedError.localizedDescription)
+                // On vérifie aussi que le statut favori n'a pas changé
+                #expect(viewModel.candidate.isFavorite == initialCandidate.isFavorite)
+        }
+        @Test("validatePhone doit définir une erreur si le numéro contient des lettres")
+        func testValidatePhone_withInvalidFormat_shouldSetErrorMessage() {
+                // Arrange
+                let viewModel = CandidateDetailViewModel(candidate: createCompleteCandidate(), isAdmin: true)
+                
+                // Act
+                viewModel.editablePhone = "0123ABC789" // Numéro invalide
+                viewModel.validatePhone()
+                
+                // Assert
+                #expect(viewModel.phoneErrorMessage == "Le format du téléphone est invalide (chiffres uniquement).")
+        }
+        
+        @Test("validateEmail doit définir une erreur si l'email est mal formaté")
+        func testValidateEmail_withInvalidFormat_shouldSetErrorMessage() {
+                // Arrange
+                let viewModel = CandidateDetailViewModel(candidate: createCompleteCandidate(), isAdmin: true)
+                
+                // Act
+                viewModel.editableEmail = "marie@curie" // Email invalide (manque le .fr)
+                viewModel.validateEmail()
+                
+                // Assert
+                #expect(viewModel.emailErrorMessage == "Le format de l'email est invalide.")
+        }
+        
 }
