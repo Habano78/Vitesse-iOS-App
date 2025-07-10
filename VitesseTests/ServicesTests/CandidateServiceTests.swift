@@ -4,13 +4,11 @@
 //
 //  Created by Perez William on 09/07/2025.
 //
-// Fichier: VitesseTests/CandidateServiceTests.swift
 
 import Foundation
 import Testing
 @testable import Vitesse
 
-// MARK: - Début des Tests pour CandidateService
 
 struct CandidateServiceTests {
         
@@ -20,8 +18,11 @@ struct CandidateServiceTests {
         func testFetchCandidates_succeeds() async throws {
                 // Arrange
                 let mockURLSession = MockURLSession()
-                let sut = CandidateService(urlSession: mockURLSession)
+                let mockTokenManager = MockAuthTokenPersistence()
+                mockTokenManager.storedToken = "un-faux-token-pour-le-test"
+                let sut = CandidateService(urlSession: mockURLSession, tokenManager: mockTokenManager)
                 let expectedCandidates = [CandidateResponseDTO(id: UUID(), firstName: "Marie", lastName: "Curie", email: "m@c.fr", phone: nil, note: nil, linkedinURL: nil, isFavorite: false)]
+                
                 mockURLSession.dataToReturn = try JSONEncoder().encode(expectedCandidates)
                 mockURLSession.responseToReturn = HTTPURLResponse(url: URL(string: "u.c")!, statusCode: 200, httpVersion: nil, headerFields: nil)
                 
@@ -37,7 +38,11 @@ struct CandidateServiceTests {
         func testFetchCandidates_fails() async throws {
                 // Arrange
                 let mockURLSession = MockURLSession()
-                let sut = CandidateService(urlSession: mockURLSession)
+                let mockTokenManager = MockAuthTokenPersistence()
+                mockTokenManager.storedToken = "un-faux-token-pour-le-test" // ✅ 2. Donnez-lui un token
+                
+                let sut = CandidateService(urlSession: mockURLSession, tokenManager: mockTokenManager)
+                
                 mockURLSession.responseToReturn = HTTPURLResponse(url: URL(string: "u.c")!, statusCode: 500, httpVersion: nil, headerFields: nil)
                 mockURLSession.dataToReturn = Data()
                 
@@ -51,7 +56,9 @@ struct CandidateServiceTests {
         func testDeleteCandidate_succeeds() async throws {
                 // Arrange
                 let mockURLSession = MockURLSession()
-                let sut = CandidateService(urlSession: mockURLSession)
+                let mockToeknManager = MockAuthTokenPersistence()
+                mockToeknManager.storedToken = "un-token-pour-le-test"
+                let sut = CandidateService(urlSession: mockURLSession, tokenManager: mockToeknManager)
                 mockURLSession.responseToReturn = HTTPURLResponse(url: URL(string: "u.c")!, statusCode: 204, httpVersion: nil, headerFields: nil)
                 mockURLSession.dataToReturn = Data()
                 let candidateID = UUID()
@@ -70,7 +77,9 @@ struct CandidateServiceTests {
         func testToggleFavoriteStatus_succeeds() async throws {
                 // Arrange
                 let mockURLSession = MockURLSession()
-                let sut = CandidateService(urlSession: mockURLSession)
+                let mockToeknManager = MockAuthTokenPersistence()
+                mockToeknManager.storedToken = "un-token-pour-le-test"
+                let sut = CandidateService(urlSession: mockURLSession, tokenManager: mockToeknManager)
                 let candidateID = UUID()
                 let expectedCandidate = CandidateResponseDTO(id: candidateID, firstName: "Marie", lastName: "Curie", email: "m@c.fr", phone: nil, note: nil, linkedinURL: nil, isFavorite: true)
                 mockURLSession.dataToReturn = try JSONEncoder().encode(expectedCandidate)
@@ -91,7 +100,9 @@ struct CandidateServiceTests {
         func testUpdateCandidate_succeeds() async throws {
                 // Arrange
                 let mockURLSession = MockURLSession()
-                let sut = CandidateService(urlSession: mockURLSession)
+                let mockToeknManager = MockAuthTokenPersistence()
+                mockToeknManager.storedToken = "un-token-pour-le-test"
+                let sut = CandidateService(urlSession: mockURLSession, tokenManager: mockToeknManager)
                 let candidateID = UUID()
                 let payload = CandidatePayloadDTO(firstName: "Marie", lastName: "Skłodowska-Curie", email: "m@c.fr", phone: nil, note: nil, linkedinURL: nil)
                 let expectedCandidate = CandidateResponseDTO(id: candidateID, firstName: "Marie", lastName: "Skłodowska-Curie", email: "m@c.fr", phone: nil, note: nil, linkedinURL: nil, isFavorite: true)
@@ -112,7 +123,9 @@ struct CandidateServiceTests {
         func testCreateCandidate_succeeds() async throws {
                 // Arrange
                 let mockURLSession = MockURLSession()
-                let sut = CandidateService(urlSession: mockURLSession)
+                let mockToeknManager = MockAuthTokenPersistence()
+                mockToeknManager.storedToken = "un-token-pour-le-test"
+                let sut = CandidateService(urlSession: mockURLSession, tokenManager: mockToeknManager)
                 let payload = CandidatePayloadDTO(firstName: "Nouveau", lastName: "Candidat", email: "new@c.fr", phone: nil, note: nil, linkedinURL: nil)
                 let expectedCandidate = CandidateResponseDTO(id: UUID(), firstName: "Nouveau", lastName: "Candidat", email: "new@c.fr", phone: nil, note: nil, linkedinURL: nil, isFavorite: false)
                 mockURLSession.dataToReturn = try JSONEncoder().encode(expectedCandidate)

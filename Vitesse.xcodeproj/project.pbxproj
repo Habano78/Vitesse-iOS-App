@@ -52,6 +52,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2243ED802E1F9E3600F33A5E /* Vitesse.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Vitesse.xctestplan; sourceTree = "<group>"; };
 		2262A3DE2E128B17001BFB18 /* Vitesse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vitesse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2262A3E12E128B17001BFB18 /* VitesseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitesseApp.swift; sourceTree = "<group>"; };
 		2262A3EE2E128B19001BFB18 /* VitesseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitesseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,6 +123,7 @@
 		2262A3D52E128B17001BFB18 = {
 			isa = PBXGroup;
 			children = (
+				2243ED802E1F9E3600F33A5E /* Vitesse.xctestplan */,
 				2262A3E12E128B17001BFB18 /* VitesseApp.swift */,
 				2262A40B2E128FEA001BFB18 /* Models */,
 				2262A40C2E128FF3001BFB18 /* ViewModels */,

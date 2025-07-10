@@ -69,7 +69,6 @@ class CandidateListViewModel: ObservableObject {
         }
         
         //MARK: suppresion de candidats
-        // Dans le fichier CandidateListViewModel.swift
         
         func deleteCandidate(at offsets: IndexSet) async {
                 let candidatesToDelete = offsets.map { self.candidates[$0] }

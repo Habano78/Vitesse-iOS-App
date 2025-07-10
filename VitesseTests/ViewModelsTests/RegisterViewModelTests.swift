@@ -52,7 +52,7 @@ struct RegisterViewModelTests {
                 viewModel.lastName = "User"
                 viewModel.email = "test@user.com"
                 viewModel.password = "123"
-                viewModel.confirmPassword = "456" // Mots de passe différents
+                viewModel.confirmPassword = "456"
                 
                 // Act
                 await viewModel.register()
@@ -69,8 +69,7 @@ struct RegisterViewModelTests {
                 let viewModel = RegisterViewModel(authService: mockAuthService, onRegisterSucceed: {})
                 
                 viewModel.firstName = "Test"
-                viewModel.email = "test@valide.com" // ✅ On met un email valide
-                // On laisse lastName, password, etc., vides
+                viewModel.email = "test@valide.com"
                 
                 // Act
                 await viewModel.register()
@@ -79,11 +78,6 @@ struct RegisterViewModelTests {
                 #expect(viewModel.errorMessage == "Tous les champs sont obligatoires.")
                 #expect(mockAuthService.registerCallCount == 0)
         }
-        
-        // ... à l'intérieur de la struct RegisterViewModelTests ...
-        
-        // On peut définir une erreur générique pour nos tests
-        private struct GenericTestError: Error {}
         
         @Test("Vérifie la gestion d'une erreur API spécifique lors de l'inscription")
         func testRegister_whenAPIServiceFails_shouldSetSpecificErrorMessage() async {
@@ -113,8 +107,9 @@ struct RegisterViewModelTests {
         func testRegister_whenUnknownErrorOccurs_shouldSetGenericErrorMessage() async {
                 // Arrange
                 let mockAuthService = MockAuthService()
+                struct ErreurBidon: Error {}
                 // On configure le mock pour qu'il échoue avec une erreur non-spécifique
-                mockAuthService.registerResult = .failure(GenericTestError())
+                mockAuthService.registerResult = .failure(ErreurBidon())
                 
                 let viewModel = RegisterViewModel(authService: mockAuthService, onRegisterSucceed: {})
                 
@@ -130,5 +125,24 @@ struct RegisterViewModelTests {
                 
                 // Assert
                 #expect(viewModel.errorMessage == "Une erreur d'inscription inattendue est survenue.")
+        }
+        
+        @Test("Vérifie que le message d'erreur est affiché si l'email est mal formaté")
+        func testRegister_whenInvalidEmailFormat_shouldSetEmailErrorMessage() async {
+                //Arrange
+                let mockAuthService = MockAuthService()
+                let viewModel = RegisterViewModel(authService: mockAuthService, onRegisterSucceed: {})
+                
+                viewModel.firstName = "John"
+                viewModel.lastName = "Doe"
+                viewModel.email = "invalidemail" 
+                viewModel.password = "password123"
+                viewModel.confirmPassword = "password123"
+                
+                //Act
+                await viewModel.register()
+                
+                //Assert
+                #expect(viewModel.emailErrorMessage == "Le format de l'email est invalide.")
         }
 }

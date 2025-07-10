@@ -151,21 +151,6 @@ struct CandidateDetailViewModelTests {
                 #expect(viewModel.candidate.isFavorite == true)
         }
         
-        @Test("toggleFavoriteStatus gère une erreur et ne change pas l'état")
-        func testToggleFavoriteStatus_fails() async {
-                // Arrange
-                let candidate = createCompleteCandidate()
-                let mockService = MockCandidateService()
-                let viewModel = CandidateDetailViewModel(candidate: candidate, isAdmin: true, candidateService: mockService)
-                mockService.toggleFavoriteResult = .failure(GenericTestError())
-                
-                // Act
-                await viewModel.toggleFavoriteStatus()
-                
-                // Assert
-                #expect(candidate.isFavorite == false)
-        }
-        
         @Test("Vérifie que le statut isAdmin est correctement initialisé")
         func testIsAdmin_isCorrectlySet() {
                 // Arrange
@@ -195,9 +180,7 @@ struct CandidateDetailViewModelTests {
                 await viewModel.toggleFavoriteStatus()
                 
                 // Assert
-                // On vérifie que le message d'erreur est bien celui de l'erreur API
                 #expect(viewModel.errorMessage == expectedError.localizedDescription)
-                // On vérifie aussi que le statut favori n'a pas changé
                 #expect(viewModel.candidate.isFavorite == initialCandidate.isFavorite)
         }
         @Test("validatePhone doit définir une erreur si le numéro contient des lettres")
@@ -224,6 +207,42 @@ struct CandidateDetailViewModelTests {
                 
                 // Assert
                 #expect(viewModel.emailErrorMessage == "Le format de l'email est invalide.")
+        }
+        
+        @Test("toggleFavoriteStatus doit gérer une erreur inconnue et afficher un message générique")
+        func testToggleFavoriteStatus_withUnknownError_setsGenericErrorMessage() async {
+                // Arrange
+                struct ErrorBidon: Error {}
+                let candidate = createCompleteCandidate()
+                let mockService = MockCandidateService()
+                mockService.toggleFavoriteResult = .failure(ErrorBidon())
+                let viewModel = CandidateDetailViewModel(candidate: candidate, isAdmin: true, candidateService: mockService)
+                
+                // Act
+                await viewModel.toggleFavoriteStatus()
+                
+                // Assert
+                #expect(viewModel.errorMessage == "Une erreur inattendue est survenue.")
+        }
+        
+        @Test("saveChanges ne doit pas continuer si les champs sont invalides")
+        func testSaveChanges_withValidationErrors_shouldBlockSave() async {
+                // Arrange
+                let mockService = MockCandidateService()
+                let viewModel = CandidateDetailViewModel(candidate: createCompleteCandidate(), isAdmin: true, candidateService: mockService)
+                
+                viewModel.startEditing()
+                viewModel.editablePhone = "123ABC" // mauvais format → déclenche phoneErrorMessage
+                viewModel.editableEmail = "invalidemail" // mauvais format → déclenche emailErrorMessage
+                viewModel.validatePhone()
+                viewModel.validateEmail()
+                
+                // Act
+                await viewModel.saveChanges()
+                
+                // Assert
+                #expect(viewModel.errorMessage == "Veuillez corriger les erreurs avant de sauvegarder.")
+                #expect(mockService.updateCandidateCallCount == 0, "Le service ne doit pas être appelé si validation échoue.")
         }
         
 }

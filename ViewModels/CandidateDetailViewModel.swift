@@ -121,14 +121,12 @@ class CandidateDetailViewModel: ObservableObject {
                 do {
                         let updatedCandidateDTO = try await candidateService.toggleFavoriteStatus(id: candidate.id)
                         self.candidate = Candidate(from: updatedCandidateDTO)
-                        print("Statut favori mis à jour pour : \(self.candidate.firstName)")
                 } catch let error as APIServiceError {
                         // On affiche les erreurs de notre service
                         errorMessage = error.localizedDescription
                 } catch {
                         // On affiche les erreurs inattendues
                         errorMessage = "Une erreur inattendue est survenue."
-                        print("Erreur toggleFavoriteStatus: \(error.localizedDescription)")
                 }
         }
         

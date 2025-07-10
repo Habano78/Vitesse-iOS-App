@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "AD2E0046-4692-46CA-9E01-A52A3EC899BE",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Vitesse.xcodeproj",
+      "identifier" : "2262A3DD2E128B17001BFB18",
+      "name" : "Vitesse"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Vitesse.xcodeproj",
+        "identifier" : "2262A3ED2E128B19001BFB18",
+        "name" : "VitesseTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:Vitesse.xcodeproj",
+        "identifier" : "2262A3F72E128B19001BFB18",
+        "name" : "VitesseUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
