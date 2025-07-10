@@ -13,9 +13,8 @@ struct AuthView: View {
         
         @StateObject private var viewModel: AuthViewModel
         @FocusState private var isInputActive: Bool
-        
-        // État pour gérer l'affichage de la feuille d'inscription
-        @State private var isShowingRegisterView = false
+
+        @State private var isShowingRegisterView = false ///  pour gérer l'affichage de la feuille d'inscription
         
         // MARK: - Initialization
         

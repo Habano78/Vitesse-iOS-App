@@ -19,8 +19,6 @@ struct AuthResponseDTO: Codable, Equatable {
         let token: String
 }
 
-import Foundation
-
 // Envoyer requête pour créer ou mettre à jour un candidat(POST /candidate & PUT /candidate/:candidateId)
 struct CandidatePayloadDTO: Codable, Equatable {
         let firstName: String
@@ -30,8 +28,6 @@ struct CandidatePayloadDTO: Codable, Equatable {
         let note: String?
         let linkedinURL: String?
 }
-
-import Foundation
 
 // Réponse du serveur lorsqu'il renvoie les informations d'un candidat(GET, POST, et PUT sur /candidate)
 struct CandidateResponseDTO: Codable, Identifiable, Equatable {
@@ -45,9 +41,7 @@ struct CandidateResponseDTO: Codable, Identifiable, Equatable {
         var isFavorite: Bool
 }
 
-// UserRegisterRequestDTO
-import Foundation
-
+// Corps de la requête (payload) envoyé au serveur pour créer un nouvel utilisateur. Utilisé pour l'appel API : `POST /user/register`
 struct UserRegisterRequestDTO: Codable {
     let email: String
     let password: String
