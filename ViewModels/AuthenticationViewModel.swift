@@ -10,7 +10,7 @@ import Foundation
 @MainActor
 class AuthViewModel: ObservableObject {
         
-        // MARK: - Propriétés liées au champ d'authentiification
+        // MARK: Propriétés liées au champ d'authentiification
         @Published var email: String = ""
         @Published var password: String = ""
         

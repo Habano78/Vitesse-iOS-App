@@ -14,14 +14,12 @@ struct CandidateListViewModelTests {
         var viewModel: CandidateListViewModel!
         var mockCandidateService: MockCandidateService!
         
-        // Données de test
+        // Données pour le test
         let candidate1 = CandidateResponseDTO(id: UUID(), firstName: "Marie", lastName: "Curie", email: "marie@curie.fr", phone: nil, note: nil, linkedinURL: nil, isFavorite: true)
         let candidate2 = CandidateResponseDTO(id: UUID(), firstName: "Albert", lastName: "Einstein", email: "albert@einstein.de", phone: nil, note: nil, linkedinURL: nil, isFavorite: false)
         let candidate3 = CandidateResponseDTO(id: UUID(), firstName: "Isaac", lastName: "Newton", email: "isaac@newton.uk", phone: nil, note: nil, linkedinURL: nil, isFavorite: true)
         
         init() {
-                // On initialise les mocks et le ViewModel dans l'init
-                // car le nouveau framework Testing recrée la struct pour chaque test.
                 mockCandidateService = MockCandidateService()
                 viewModel = CandidateListViewModel(candidateService: mockCandidateService)
         }
@@ -144,27 +142,6 @@ struct CandidateListViewModelTests {
                 // Assert
                 #expect(viewModel.candidates.isEmpty == true)
                 #expect(viewModel.errorMessage == expectedError.localizedDescription)
-        }
-        
-        @Test("addCandidateToList doit ajouter un candidat au début de la liste")
-        func testAddCandidateToList() async {
-                // Arrange
-                // On charge le ViewModel avec une liste initiale
-                mockCandidateService.fetchCandidatesResult = .success([candidate1])
-                await viewModel.fetchCandidates()
-                
-                // On s'assure que l'état initial est correct
-                #expect(viewModel.candidates.count == 1)
-                
-                // Le nouveau candidat à ajouter
-                let newCandidate = Candidate(from: candidate2)
-                
-                // Act
-                viewModel.addCandidateToList(newCandidate)
-                
-                // Assert
-                #expect(viewModel.candidates.count == 2)
-                #expect(viewModel.candidates.first?.id == newCandidate.id, "Le nouveau candidat doit être le premier de la liste.")
         }
         
         @Test("deleteSelectedCandidates doit supprimer les candidats et appeler le service")

@@ -74,7 +74,7 @@ class CandidateDetailViewModel: ObservableObject {
         
         // Sauvegarde les modifications via l'API.
         func saveChanges() async {
-                /// appel aux validateurs
+                /// appel aux valideurs
                 validateEmail()
                 validatePhone()
                 /// verification des erreurs en même temps
