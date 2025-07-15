@@ -77,10 +77,8 @@ class RegisterViewModel: ObservableObject {
                 )
                 
                 do {
-                        // On appelle la fonction register du service
                         try await authService.register(with: registrationDetails)
                         
-                        // Si l'appel réussit, on exécute le callback de succès
                         onRegisterSucceed()
                         
                 } catch let error as APIServiceError {

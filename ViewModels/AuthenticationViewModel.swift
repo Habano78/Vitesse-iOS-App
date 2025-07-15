@@ -7,22 +7,21 @@
 
 import Foundation
 
-/// Gère la logique et l'état de la vue d'authentification (`AuthView`).
 @MainActor
 class AuthViewModel: ObservableObject {
         
-        // MARK: - Propriétés liées au formulaire
+        // MARK: - Propriétés liées au champ d'authentiification
         @Published var email: String = ""
         @Published var password: String = ""
         
-        // MARK: - Propriétés d'état de l'UI
+        // MARK: Propriétés d'état de l'UI
         @Published var isLoading: Bool = false
         @Published var errorMessage: String?
         
-        // MARK: - Dépendances & Callbacks
+        // MARK: Dépendances & Callbacks
         private let authService: AuthenticationServiceProtocol
         
-        let onLoginSucceed: ((AuthResponseDTO) -> Void) /// callback pour notifier VitesseApp du succès de connexion
+        let onLoginSucceed: ((AuthResponseDTO) -> Void)
         
         //MARK: Init
         init(authService: AuthenticationServiceProtocol, onLoginSucceed: @escaping (AuthResponseDTO) -> Void) {
@@ -31,7 +30,7 @@ class AuthViewModel: ObservableObject {
         }
         
         //MARK: Actions
-        func login() async {  /// Fonction qui  gère l'état de chargement, prépare les données, appelle le service et traite les cas de succès ou d'erreur.
+        func login() async {
                 isLoading = true
                 errorMessage = nil
                 defer { isLoading = false }
@@ -48,9 +47,9 @@ class AuthViewModel: ObservableObject {
                         self.onLoginSucceed(userSession) /// ici on notifie la vue parente du succès de connex
                         
                 } catch let error as APIServiceError {
-                        errorMessage = error.errorDescription /// message d'erreur si l'erreur vient de notre couche API.
+                        errorMessage = error.errorDescription
                 } catch {
-                        errorMessage = "Erreur inattendue.Veuillez réessayer." /// message générique pour toute autre erreur inattendue.
+                        errorMessage = "Erreur inattendue.Veuillez réessayer."
                 }
         }
 }

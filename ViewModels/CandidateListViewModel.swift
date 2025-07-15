@@ -19,16 +19,16 @@ class CandidateListViewModel: ObservableObject {
         
         @Published private var allCandidates: [Candidate] = []
         
-        // MARK: - Propriété Calculée. Liste que la vue va réellement afficher qui dépend de `allCandidates` et `searchText`.
+        // MARK: Propriété Calculée. Liste que la vue va réellement afficher qui dépend de `allCandidates` et `searchText`.
         var candidates: [Candidate] {
                 
-                var filteredCandidates = allCandidates/// on part de la liste complete
+                var filteredCandidates = allCandidates
                 
                 if isFavoritesFilterActive {
-                        filteredCandidates = filteredCandidates.filter { $0.isFavorite } /// Si favoris est actif, on réduit la liste.
+                        filteredCandidates = filteredCandidates.filter { $0.isFavorite }
                 }
                 
-                if !searchText.isEmpty { /// si l'utilisateur tape dans la barre de recherche (pas vide)
+                if !searchText.isEmpty {
                         filteredCandidates = filteredCandidates.filter { candidate in
                                 candidate.firstName.localizedCaseInsensitiveContains(searchText) ||
                                 candidate.lastName.localizedCaseInsensitiveContains(searchText)
@@ -97,7 +97,6 @@ class CandidateListViewModel: ObservableObject {
                         }
                 }
                 
-                // On met à jour le message d'erreur à la fin
                 if !deletionErrors.isEmpty {
                         // On construit le message que le test attend
                         let failedNames = candidatesToDelete.map { $0.firstName }.joined(separator: ", ")
@@ -117,7 +116,6 @@ class CandidateListViewModel: ObservableObject {
                 
                 var deletionErrors: [Error] = []
                 
-                // Le TaskGroup va maintenant nous retourner les erreurs éventuelles
                 await withTaskGroup(of: Error?.self) { group in
                         for id in ids {
                                 group.addTask {

@@ -8,7 +8,7 @@
 import Foundation
 import Security
 
-// La classe se conforme maintenant au protocole
+
 class AuthTokenPersistence: AuthTokenPersistenceProtocol {
     private let keychainService: KeychainInterface
     private let tokenLabel = "com.vitesse.authToken" // Clé unique pour le token

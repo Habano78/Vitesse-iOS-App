@@ -14,7 +14,7 @@ struct AuthView: View {
         @StateObject private var viewModel: AuthViewModel
         @FocusState private var isInputActive: Bool
 
-        @State private var isShowingRegisterView = false ///  pour gérer l'affichage de la feuille d'inscription
+        @State private var isShowingRegisterView = false
         
         // MARK: - Initialization
         
@@ -28,9 +28,9 @@ struct AuthView: View {
         // MARK: - Body
         var body: some View {
                 NavigationStack {
-                        VStack(spacing: 0) { // Espacement général à 0, on gère avec des paddings
+                        VStack(spacing: 0) {
                                 
-                                Spacer() // Pousse le contenu au centre
+                                Spacer()
                                 
                                 Text("Login")
                                         .font(.largeTitle)
@@ -73,9 +73,8 @@ struct AuthView: View {
                                                 //MARK: FORGOT PASSWORD
                                                 HStack {
                                                         Button("Forgot password?") {
-                                                                // Pour l'instant, l'action ne fait rien
+                                                                // l'action ne fait rien
                                                                 print("Bouton 'Mot de passe oublié' cliqué.")
-                                                                print("l'API ne fournit pas les endpoints nécessaires pour ce processus")
                                                         }
                                                         .font(.footnote)
                                                         .tint(.gray) //couleur discrète
@@ -83,7 +82,7 @@ struct AuthView: View {
                                         }
                                 }
                                 .padding(.top, 30)
-                                .padding(.horizontal, 40) ///Padding pour les champs
+                                .padding(.horizontal, 40)
                                 
                                 // Affichage erreurs d'identifiants
                                 if let errorMessage = viewModel.errorMessage {
@@ -129,8 +128,8 @@ struct AuthView: View {
                                 .padding(.horizontal, 55)
                                 .padding(.top, 30)
                                 
-                                Spacer() // pour pousser le contenu au centre
-                                Spacer() // pour pousser le contenu au centre
+                                Spacer()
+                                Spacer()
                                 
                         }
                         .background(Color(.systemGroupedBackground))

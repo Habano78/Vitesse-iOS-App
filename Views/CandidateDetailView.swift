@@ -235,7 +235,7 @@ struct CandidateDetailView: View {
                                         isFavorite: true
                                 )
                         ),
-                        isAdmin: true // On peut tester les deux cas
+                        isAdmin: true 
                 )
         }
 }

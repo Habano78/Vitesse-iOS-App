@@ -8,7 +8,7 @@ import SwiftUI
 
 struct CandidateListView: View {
         
-        // MARK: - Properties
+        // MARK: Properties
         @StateObject private var viewModel = CandidateListViewModel()
         
         // États locaux pour gérer l'interface
@@ -23,7 +23,7 @@ struct CandidateListView: View {
         let onLogout: () -> Void
         
         
-        // MARK: - Init
+        // MARK: Init
         init(isAdmin: Bool, onLogout: @escaping () -> Void) {
                 self.isAdmin = isAdmin
                 self.onLogout = onLogout
@@ -33,7 +33,7 @@ struct CandidateListView: View {
         var body: some View {
                 NavigationStack {
                         VStack(spacing: 0) {
-                                // La liste utilise la variable "selection" pour gérer les sélections en mode édition
+                                
                                 List {
                                         ForEach(viewModel.candidates) { candidate in
                                                 // NavigationLink passe la "valeur" candidate
@@ -64,7 +64,6 @@ struct CandidateListView: View {
                                         }
                                 }
                                 .listStyle(.insetGrouped)
-                                // Ce modificateur reçoit la "valeur" de la NavigationLink et déclenche la navigation
                                 .navigationDestination(for: Candidate.self) { candidate in
                                         if !isEditing {
                                                 CandidateDetailView(candidate: candidate, isAdmin: isAdmin)

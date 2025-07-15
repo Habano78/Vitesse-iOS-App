@@ -4,9 +4,6 @@
 //
 //  Created by Perez William on 30/06/2025.
 //
-///On est ici sur le point d'entrée principal de l'application Vitesse/// Ici on gère l'état d'authentification global (`isAuthenticated`, `isAdmin`)
-/// et on orchestre la vue à afficher au démarrage : l'écran de connexion ou la liste principale.
-
 
 import SwiftUI
 
@@ -16,16 +13,16 @@ struct VitesseApp: App {
         // MARK: - Propriétés d'État
         
         
-        @State private var isAuthenticated: Bool /// est-ce que  l'utilisateur est actuellement connecté ?
-        @State private var isAdmin: Bool /// est-ce ue l'utilisateur a les droits d'administrateur ?
+        @State private var isAuthenticated: Bool
+        @State private var isAdmin: Bool
         
-        private let tokenManager = AuthTokenPersistence() /// gestionnaire pour la persistance du token
+        private let tokenManager = AuthTokenPersistence()
         
         // MARK: - Init
         init() {
                 var hasToken = false
                 do {
-                        if try tokenManager.retrieveToken() != nil {  /// vérification de token existant
+                        if try tokenManager.retrieveToken() != nil {
                                 hasToken = true
                         }
                 } catch {
@@ -35,20 +32,19 @@ struct VitesseApp: App {
                 
                 // Init des propriétés @State
                 _isAuthenticated = State(initialValue: hasToken)
-                _isAdmin = State(initialValue: false) /// Le statut admin sera défini après une nouvelle connexion.
+                _isAdmin = State(initialValue: false)
         }
         
         // MARK: corps
         var body: some Scene {
                 WindowGroup {
-                        if isAuthenticated {  /// Affiche la vue appropriée en fonction de l'état d'authentification.
-                                CandidateListView(isAdmin: isAdmin, onLogout: logout) /// Si l'utilisateur est connecté, on affiche la liste des candidats
-                                
-                        } else {  /// Sinon, on affiche l'écran de connexion
+                        if isAuthenticated {
+                                CandidateListView(isAdmin: isAdmin, onLogout: logout)
+                        } else {
                                 AuthView(
                                         authService: AuthService(),
                                         onLoginSucceed: { authResponse in
-                                                handleLoginSuccess(with: authResponse)  ///callback exécuté par AuthViewModel en cas de succès
+                                                handleLoginSuccess(with: authResponse)
                                         }
                                 )
                         }
@@ -56,7 +52,7 @@ struct VitesseApp: App {
         }
         
         // MARK: - Méthodes privées
-        private func handleLoginSuccess(with response: AuthResponseDTO) { /// actions à effectuer après une connexion réussie.
+        private func handleLoginSuccess(with response: AuthResponseDTO) {
                 do {
                         try tokenManager.saveToken(response.token)
                         self.isAdmin = response.isAdmin
@@ -73,7 +69,7 @@ struct VitesseApp: App {
                 } catch {
                         print("Erreur lors de la suppression du token: \(error.localizedDescription)")
                 }
-                self.isAuthenticated = false /// Quoi qu'il arrive, on déconnecte l'utilisateur de l'interface./
+                self.isAuthenticated = false
                 self.isAdmin = false
         }
 }

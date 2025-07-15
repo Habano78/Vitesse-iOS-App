@@ -85,7 +85,6 @@ class AddCandidateViewModel: ObservableObject {
                 )
                 
                 do {
-                        // On appelle la nouvelle fonction du service
                         let newCandidateDTO = try await candidateService.createCandidate(with: payload)
                         
                         // On convertit le DTO en modèle métier
