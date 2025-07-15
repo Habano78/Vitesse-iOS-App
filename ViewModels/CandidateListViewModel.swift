@@ -104,12 +104,6 @@ class CandidateListViewModel: ObservableObject {
                 }
         }
         
-        //MARK: rajouter des candidats
-        func addCandidateToList(_ candidate: Candidate) {
-                // On insère le nouveau candidat au début de notre liste source
-                allCandidates.insert(candidate, at: 0)
-        }
-        
         //MARK: fonction pour gérer la suppresion multiple lors de la vue édition
         func deleteSelectedCandidates(ids: Set<UUID>) async {
                 allCandidates.removeAll { ids.contains($0.id) }

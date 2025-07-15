@@ -25,10 +25,10 @@ protocol CandidateServiceProtocol {
         func createCandidate(with payload: CandidatePayloadDTO) async throws -> CandidateResponseDTO
 }
 
-//MARK: Implémentation du contrat
+//MARK: Implémentation des contrats
 class CandidateService: APIService, CandidateServiceProtocol {
         
-        // L'initialiseur appelle la classe mère et les dépendances sont maintenant gérées par APIService.
+        // L'initialiseur appelle la classe mère. Les dépendances sont maintenant gérées par APIService.
         func fetchCandidates() async throws -> [CandidateResponseDTO] {
                 try await performRequest(to: "candidate", method: .GET)
         }

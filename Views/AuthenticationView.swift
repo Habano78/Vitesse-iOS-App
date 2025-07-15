@@ -6,18 +6,22 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct AuthView: View {
         
         // MARK: - Properties
-        
         @StateObject private var viewModel: AuthViewModel
-        @FocusState private var isInputActive: Bool
-
+        @FocusState private var focusedField: AuthField? // On utilise une enum pour le focus
         @State private var isShowingRegisterView = false
         
-        // MARK: - Initialization
+        // Enum pour gérer le focus entre les champs
+        enum AuthField {
+                case email
+                case password
+        }
         
+        // MARK: - Initialization
         init(authService: AuthenticationServiceProtocol, onLoginSucceed: @escaping (AuthResponseDTO) -> Void) {
                 _viewModel = StateObject(wrappedValue: AuthViewModel(
                         authService: authService,
@@ -28,119 +32,84 @@ struct AuthView: View {
         // MARK: - Body
         var body: some View {
                 NavigationStack {
-                        VStack(spacing: 0) {
-                                
-                                Spacer()
-                                
-                                Text("Login")
-                                        .font(.largeTitle)
-                                        .fontWeight(.bold)
-                                        .padding(.bottom, 40)
-                                
-                                // Conteneur pour les champs de saisie
-                                VStack(spacing: 15) {
-                                        VStack(alignment: .leading) {
-                                                Text("Email/Username")
-                                                        .font(.footnote)
-                                                        .foregroundColor(.gray)
-                                                TextField("Enter your email", text: $viewModel.email)
-                                                        .padding(.horizontal)
-                                                        .frame(height: 40)
-                                                        .background(Color.white)
-                                                        .cornerRadius(8)
-                                                        .overlay(
-                                                                RoundedRectangle(cornerRadius: 8)
-                                                                        .stroke(Color.gray.opacity(0.4), lineWidth: 1)
-                                                        )
-                                                        .keyboardType(.emailAddress)
-                                                        .autocapitalization(.none)
-                                                        .disableAutocorrection(true)
-                                        }
+                        ScrollView {
+                                VStack(spacing: 20) {
+                                        Text("Login")
+                                                .font(.largeTitle).fontWeight(.bold)
+                                                .padding(.top, 50)
+                                                .padding(.bottom, 30)
                                         
-                                        VStack(alignment: .leading) {
-                                                Text("Password")
-                                                        .font(.footnote)
-                                                        .foregroundColor(.gray)
-                                                SecureField("Enter your password", text: $viewModel.password)
-                                                        .padding(.horizontal)
-                                                        .frame(height: 40)
-                                                        .background(Color.white)
-                                                        .cornerRadius(8)
-                                                        .overlay(
-                                                                RoundedRectangle(cornerRadius: 8)
-                                                                        .stroke(Color.gray.opacity(0.4), lineWidth: 1)
-                                                        )
-                                                //MARK: FORGOT PASSWORD
+                                        // --- Champs de saisie ---
+                                        VStack(alignment: .leading, spacing: 15) {
+                                                // Champ Email
+                                                VStack(alignment: .leading) {
+                                                        Text("Email/Username").font(.footnote).foregroundColor(.gray)
+                                                        TextField("Enter your email", text: $viewModel.email)
+                                                                .keyboardType(.emailAddress)
+                                                                .autocapitalization(.none)
+                                                                .textContentType(.emailAddress)
+                                                                .standardTextFieldStyle()
+                                                                .focused($focusedField, equals: .email)
+                                                                .onSubmit { focusedField = .password } // Passe au suivant
+                                                }
+                                                
+                                                // Champ Mot de passe
+                                                VStack(alignment: .leading) {
+                                                        Text("Password").font(.footnote).foregroundColor(.gray)
+                                                        SecureField("Enter your password", text: $viewModel.password)
+                                                                .textContentType(.password)
+                                                                .standardTextFieldStyle()
+                                                                .focused($focusedField, equals: .password)
+                                                                .onSubmit { Task { await viewModel.login() } } // Lance la connexion
+                                                }
+                                                
+                                                // Lien Mot de passe oublié
                                                 HStack {
+                                                        Spacer()
                                                         Button("Forgot password?") {
-                                                                // l'action ne fait rien
-                                                                print("Bouton 'Mot de passe oublié' cliqué.")
+                                                                print("Forgot password tapped.")
                                                         }
                                                         .font(.footnote)
-                                                        .tint(.gray) //couleur discrète
+                                                        .tint(.gray)
                                                 }
                                         }
+                                        
+                                        // --- Message d'erreur ---
+                                        if let errorMessage = viewModel.errorMessage {
+                                                Text(errorMessage)
+                                                        .foregroundColor(.red).font(.footnote)
+                                                        .multilineTextAlignment(.center).padding(.top)
+                                        }
+                                        
+                                        // --- Boutons d'action ---
+                                        VStack(spacing: 15) {
+                                                if viewModel.isLoading {
+                                                        ProgressView()
+                                                } else {
+                                                        // Bouton Sign In
+                                                        Button("Sign in") { Task { await viewModel.login() } }
+                                                                .frame(maxWidth: .infinity)
+                                                                .padding().background(Color.black)
+                                                                .foregroundColor(.white).cornerRadius(10)
+                                                        
+                                                        // Bouton Register
+                                                        Button("Register") { isShowingRegisterView = true }
+                                                                .frame(maxWidth: .infinity)
+                                                                .padding()
+                                                                .background(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 1.5))
+                                                                .foregroundColor(.black)
+                                                }
+                                        }
+                                        .padding(.top, 30)
                                 }
-                                .padding(.top, 30)
                                 .padding(.horizontal, 40)
-                                
-                                // Affichage erreurs d'identifiants
-                                if let errorMessage = viewModel.errorMessage {
-                                        Text(errorMessage)
-                                                .foregroundColor(.red)
-                                                .font(.caption)
-                                                .multilineTextAlignment(.center)
-                                                .padding()
-                                }
-                                Spacer()
-                                //MARK: Conteneur pour les boutons
-                                VStack(spacing: 15) {
-                                        if viewModel.isLoading {
-                                                ProgressView()
-                                                        .padding(.top, 20)
-                                        } else {
-                                                
-                                                Button("Sign in") {
-                                                        Task { await viewModel.login() }
-                                                }
-                                                .frame(maxWidth: .infinity)
-                                                .padding()
-                                                .frame(height: 40)
-                                                .frame(width: 160)
-                                                .background(Color.black)
-                                                .foregroundColor(.white)
-                                                .cornerRadius(10)
-                                                
-                                                Button("Register") {
-                                                        isShowingRegisterView = true
-                                                }
-                                                .frame(maxWidth: .infinity)
-                                                .padding(.horizontal)
-                                                .frame(height: 35)
-                                                .frame(width: 160)
-                                                .background(
-                                                        RoundedRectangle(cornerRadius: 10)
-                                                                .stroke(Color.black, lineWidth: 1.5)
-                                                )
-                                                .foregroundColor(.black)
-                                        }
-                                }
-                                .padding(.horizontal, 55)
-                                .padding(.top, 30)
-                                
-                                Spacer()
-                                Spacer()
-                                
                         }
-                        .background(Color(.systemGroupedBackground))
-                        .edgesIgnoringSafeArea(.all)
-                        .onTapGesture { isInputActive = false }
+                        .navigationBarHidden(true)
+                        .onTapGesture { focusedField = nil } // Ferme le clavier
                         .sheet(isPresented: $isShowingRegisterView) {
-                                NavigationStack {
-                                        RegisterView(onRegisterSucceed: {
-                                                isShowingRegisterView = false
-                                        })
-                                }
+                                RegisterView(onRegisterSucceed: {
+                                        isShowingRegisterView = false
+                                })
                         }
                 }
         }

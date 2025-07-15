@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2243ED822E26A5CE00F33A5E /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2243ED812E26A5CE00F33A5E /* ViewModifiers.swift */; };
 		2262A3E22E128B17001BFB18 /* VitesseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A3E12E128B17001BFB18 /* VitesseApp.swift */; };
 		2262A4102E129035001BFB18 /* DTOsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A40F2E129035001BFB18 /* DTOsModels.swift */; };
 		2262A4122E129056001BFB18 /* BusinessModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4112E129056001BFB18 /* BusinessModels.swift */; };
@@ -29,8 +30,6 @@
 		2262A44E2E1AA618001BFB18 /* HTTPMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A44D2E1AA618001BFB18 /* HTTPMethods.swift */; };
 		2262A44F2E1AA618001BFB18 /* HTTPMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A44D2E1AA618001BFB18 /* HTTPMethods.swift */; };
 		2262A4512E1AA699001BFB18 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4502E1AA699001BFB18 /* APIService.swift */; };
-		2262A4542E1AF76E001BFB18 /* AddCandidateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4532E1AF76E001BFB18 /* AddCandidateViewModel.swift */; };
-		2262A4572E1AF7FA001BFB18 /* AddCandidateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4562E1AF7FA001BFB18 /* AddCandidateView.swift */; };
 		2262A45B2E1BAE15001BFB18 /* Email_PhoneValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262A4592E1BAE15001BFB18 /* Email_PhoneValidation.swift */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +52,7 @@
 
 /* Begin PBXFileReference section */
 		2243ED802E1F9E3600F33A5E /* Vitesse.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Vitesse.xctestplan; sourceTree = "<group>"; };
+		2243ED812E26A5CE00F33A5E /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		2262A3DE2E128B17001BFB18 /* Vitesse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vitesse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2262A3E12E128B17001BFB18 /* VitesseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitesseApp.swift; sourceTree = "<group>"; };
 		2262A3EE2E128B19001BFB18 /* VitesseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitesseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -77,8 +77,6 @@
 		2262A43E2E17B906001BFB18 /* JsonEncoderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonEncoderProtocol.swift; sourceTree = "<group>"; };
 		2262A44D2E1AA618001BFB18 /* HTTPMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethods.swift; sourceTree = "<group>"; };
 		2262A4502E1AA699001BFB18 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
-		2262A4532E1AF76E001BFB18 /* AddCandidateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCandidateViewModel.swift; sourceTree = "<group>"; };
-		2262A4562E1AF7FA001BFB18 /* AddCandidateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCandidateView.swift; sourceTree = "<group>"; };
 		2262A4592E1BAE15001BFB18 /* Email_PhoneValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Email_PhoneValidation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -163,7 +161,6 @@
 				2262A4272E143C67001BFB18 /* CandidateListViewModel.swift */,
 				2262A4342E1550B3001BFB18 /* CandidateDetailViewModel.swift */,
 				2262A4382E16A3C5001BFB18 /* RegisterViewModel.swift */,
-				2262A4532E1AF76E001BFB18 /* AddCandidateViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -180,7 +177,7 @@
 		2262A40E2E129008001BFB18 /* Outils */ = {
 			isa = PBXGroup;
 			children = (
-				2262A4672E1E9EA0001BFB18 /* ValidationChamps */,
+				2262A4672E1E9EA0001BFB18 /* Texte_Champs_Modifiers */,
 				2262A4632E1E9E07001BFB18 /* ServicesTools */,
 				2262A4622E1E9DDE001BFB18 /* Protocols */,
 			);
@@ -194,7 +191,6 @@
 				2262A4292E144BAD001BFB18 /* CandidateListView.swift */,
 				2262A4362E1558B2001BFB18 /* CandidateDetailView.swift */,
 				2262A43A2E16A50A001BFB18 /* RegistrerView.swift */,
-				2262A4562E1AF7FA001BFB18 /* AddCandidateView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -228,12 +224,13 @@
 			path = ServicesTools;
 			sourceTree = "<group>";
 		};
-		2262A4672E1E9EA0001BFB18 /* ValidationChamps */ = {
+		2262A4672E1E9EA0001BFB18 /* Texte_Champs_Modifiers */ = {
 			isa = PBXGroup;
 			children = (
 				2262A4592E1BAE15001BFB18 /* Email_PhoneValidation.swift */,
+				2243ED812E26A5CE00F33A5E /* ViewModifiers.swift */,
 			);
-			path = ValidationChamps;
+			path = Texte_Champs_Modifiers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -387,6 +384,7 @@
 				2262A4142E133570001BFB18 /* AuthenticationService.swift in Sources */,
 				2262A42A2E144BAD001BFB18 /* CandidateListView.swift in Sources */,
 				2262A4352E1550B3001BFB18 /* CandidateDetailViewModel.swift in Sources */,
+				2243ED822E26A5CE00F33A5E /* ViewModifiers.swift in Sources */,
 				2262A4392E16A3C5001BFB18 /* RegisterViewModel.swift in Sources */,
 				2262A4242E1426DE001BFB18 /* AuthTokenPersistance.swift in Sources */,
 				2262A4372E1558B2001BFB18 /* CandidateDetailView.swift in Sources */,
@@ -397,9 +395,7 @@
 				2262A4512E1AA699001BFB18 /* APIService.swift in Sources */,
 				2262A3E22E128B17001BFB18 /* VitesseApp.swift in Sources */,
 				2262A4122E129056001BFB18 /* BusinessModels.swift in Sources */,
-				2262A4572E1AF7FA001BFB18 /* AddCandidateView.swift in Sources */,
 				2262A41D2E13D25E001BFB18 /* AuthenticationView.swift in Sources */,
-				2262A4542E1AF76E001BFB18 /* AddCandidateViewModel.swift in Sources */,
 				2262A44F2E1AA618001BFB18 /* HTTPMethods.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

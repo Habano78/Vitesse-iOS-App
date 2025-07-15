@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Authentication Service Protocol
+// MARK: Authentication Service Protocol
 protocol AuthenticationServiceProtocol {
         @MainActor
         func login(credentials: AuthRequestDTO) async throws -> AuthResponseDTO
@@ -17,7 +17,7 @@ protocol AuthenticationServiceProtocol {
 }
 
 
-// MARK: - Authentication Service Implementation
+// MARK: Implementation
 class AuthService: APIService, AuthenticationServiceProtocol {
         
         func login(credentials: AuthRequestDTO) async throws -> AuthResponseDTO {

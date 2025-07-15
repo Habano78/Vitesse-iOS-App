@@ -9,19 +9,17 @@ import SwiftUI
 struct RegisterView: View {
         
         // MARK: Properties
+        @StateObject private var viewModel: RegisterViewModel 
+        @FocusState private var isInputActive: Bool ///contrôler quel champ de texte est actif
         
-        @StateObject private var viewModel: RegisterViewModel
-        @FocusState private var isInputActive: Bool
-        
-        // MARK: - Init
-        
+        // MARK: Init
         init(onRegisterSucceed: @escaping () -> Void) {
                 _viewModel = StateObject(wrappedValue: RegisterViewModel(
                         onRegisterSucceed: onRegisterSucceed
                 ))
         }
         
-        // MARK: - Body
+        // MARK: Body
         var body: some View {
                 NavigationStack {
                         ScrollView {
@@ -120,22 +118,6 @@ struct RegisterView: View {
                                 .modifier(StandardTextFieldModifier())
                                 .focused($isInputActive)
                 }
-        }
-}
-
-// MARK: ViewModifier for consistent TextField style
-
-private struct StandardTextFieldModifier: ViewModifier {
-        func body(content: Content) -> some View {
-                content
-                        .textFieldStyle(.plain)
-                        .padding(12)
-                        .background(Color.white)
-                        .cornerRadius(8)
-                        .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                        .stroke(Color.black.opacity(0.4), lineWidth: 1)
-                        )
         }
 }
 

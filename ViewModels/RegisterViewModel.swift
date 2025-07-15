@@ -10,14 +10,14 @@ import Foundation
 @MainActor
 class RegisterViewModel: ObservableObject {
         
-        // MARK: - Propriétés liées au formulaire
+        // MARK: Propriétés liées au formulaire
         @Published var firstName = ""
         @Published var lastName = ""
         @Published var email = ""
         @Published var password = ""
         @Published var confirmPassword = ""
         
-        // MARK: - Propriétés d'état pour l'UI
+        // MARK: Propriétés d'état pour l'UI
         @Published var isLoading = false
         @Published var errorMessage: String?
         @Published var emailErrorMessage: String?
@@ -25,8 +25,7 @@ class RegisterViewModel: ObservableObject {
         // MARK: - Dépendances & Callbacks
         private let authService: AuthenticationServiceProtocol
         
-        // Un callback pour signaler le succès à la vue parente
-        // afin qu'elle puisse fermer l'écran d'inscription.
+        // Un callback pour signaler le succès à la vue parente et qu'elle puisse fermer l'écran d'inscription.
         let onRegisterSucceed: () -> Void
         
         init(
@@ -46,7 +45,7 @@ class RegisterViewModel: ObservableObject {
                 }
         }
         
-        // MARK: - Actions
+        // MARK: Actions
         
         func register() async {
                 // vérification de la validité de l'émail

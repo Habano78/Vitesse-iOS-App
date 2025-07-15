@@ -13,7 +13,6 @@ struct CandidateListView: View {
         
         // États locaux pour gérer l'interface
         @State private var isEditing = false
-        @State private var isShowingAddCandidateSheet = false
         @State private var selection = Set<UUID>()
         // état pour déclencher la navigation manuellement
         @State private var candidateToNavigate: Candidate?
@@ -109,12 +108,6 @@ struct CandidateListView: View {
                                         ContentUnavailableView("Aucun Candidat", systemImage: "person.3.fill")
                                 }
                         }
-                        .sheet(isPresented: $isShowingAddCandidateSheet) {
-                                AddCandidateView { newCandidate in
-                                        viewModel.addCandidateToList(newCandidate)
-                                        isShowingAddCandidateSheet = false
-                                }
-                        }
                 }
         }
         
@@ -123,17 +116,24 @@ struct CandidateListView: View {
         /// Barre d'outils pour le mode de lecture normal.
         @ToolbarContentBuilder
         private var defaultToolbar: some ToolbarContent {
-                ToolbarItemGroup(placement: .topBarLeading) {
+                // Le bouton "Edit" à gauche
+                ToolbarItem(placement: .topBarLeading) {
                         Button("Edit") {
                                 withAnimation { isEditing = true }
                         }
                 }
                 
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                        if isAdmin {
-                                Button { isShowingAddCandidateSheet = true } label: { Image(systemName: "plus") }
-                        }
-                        Button { viewModel.isFavoritesFilterActive.toggle() } label: {
+                // Le titre "Candidats" au centre
+                ToolbarItem(placement: .principal) {
+                        Text("Candidats")
+                                .fontWeight(.semibold)
+                }
+                
+                // Le bouton "Favoris" à droite
+                ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                                viewModel.isFavoritesFilterActive.toggle()
+                        } label: {
                                 Image(systemName: viewModel.isFavoritesFilterActive ? "star.fill" : "star")
                         }
                         .tint(.yellow)
@@ -177,12 +177,4 @@ struct CandidateListView: View {
                         selection.insert(candidateID)
                 }
         }
-}
-
-// MARK: - Preview
-
-#Preview {
-        CandidateListView(isAdmin: true, onLogout: {
-                print("Logout action triggered in preview.")
-        })
 }
