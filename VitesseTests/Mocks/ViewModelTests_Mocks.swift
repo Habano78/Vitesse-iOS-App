@@ -48,18 +48,18 @@ class MockAuthService: AuthenticationServiceProtocol {
         }
 }
 
-// MARK: - MockCandidateService
+// MARK: MockCandidateService
 // Simule le service de gestion des candidats
 class MockCandidateService: CandidateServiceProtocol {
         
-        // MARK: - Propriétés de Contrôle
+        // MARK: Propriétés de Contrôle
         var fetchCandidatesResult: Result<[CandidateResponseDTO], Error> = .success([])
         var deleteCandidateResult: Result<Void, Error> = .success(())
         var toggleFavoriteResult: Result<CandidateResponseDTO, Error>?
         var updateCandidateResult: Result<CandidateResponseDTO, Error>?
         var createCandidateResult: Result<CandidateResponseDTO, Error>?
         
-        // MARK: - Propriétés "Espions"
+        // MARK: Propriétés "Espions"
         var fetchCandidatesCallCount = 0
         var deleteCandidateCallCount = 0
         var toggleFavoriteCallCount = 0

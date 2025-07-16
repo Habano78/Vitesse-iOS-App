@@ -69,7 +69,7 @@ class CandidateDetailViewModel: ObservableObject {
         
         //Annule l'édition et revient au mode lecture.
         func cancelEditing() {
-                self.isEditing = false
+                isEditing = false
         }
         
         // Sauvegarde les modifications via l'API.
@@ -101,26 +101,26 @@ class CandidateDetailViewModel: ObservableObject {
                         let updatedCandidateDTO = try await candidateService.updateCandidate(id: candidate.id, with: payload)
                         
                         // Met à jour le modèle principal avec la réponse du serveur
-                        self.candidate = Candidate(from: updatedCandidateDTO)
+                        candidate = Candidate(from: updatedCandidateDTO)
                         
                         // Quitte le mode édition
-                        self.isEditing = false
+                        isEditing = false
                         
                 } catch let error as APIServiceError {
-                        self.errorMessage = error.localizedDescription
+                        errorMessage = error.localizedDescription
                 } catch {
-                        self.errorMessage = "Une erreur de sauvegarde inattendue est survenue."
+                        errorMessage = "Une erreur de sauvegarde inattendue est survenue."
                 }
         }
         //changement de statut favori
         func toggleFavoriteStatus() async {
-                errorMessage = nil /// On efface les anciens messages
+                errorMessage = nil /// pour effacer les anciens messages
                 isTogglingFavorite = true
                 defer { isTogglingFavorite = false }
                 
                 do {
                         let updatedCandidateDTO = try await candidateService.toggleFavoriteStatus(id: candidate.id)
-                        self.candidate = Candidate(from: updatedCandidateDTO)
+                        candidate = Candidate(from: updatedCandidateDTO)
                 } catch let error as APIServiceError {
                         // On affiche les erreurs du service
                         errorMessage = error.localizedDescription

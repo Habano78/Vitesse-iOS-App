@@ -19,7 +19,7 @@ class CandidateListViewModel: ObservableObject {
         
         @Published private var allCandidates: [Candidate] = []
         
-        // MARK: Propriété Calculée. Liste que la vue va réellement afficher qui dépend de `allCandidates` et `searchText`.
+        // MARK: Propriété Calculée.
         var candidates: [Candidate] {
                 
                 var filteredCandidates = allCandidates
@@ -60,16 +60,13 @@ class CandidateListViewModel: ObservableObject {
                         }
                         
                 } catch let error as APIServiceError {
-                        // En cas d'erreur connue de notre service, on affiche la description localisée
                         self.errorMessage = error.localizedDescription
                 } catch {
-                        // En cas d'autre erreur inattendue
                         self.errorMessage = "Une erreur inattendue est survenue."
                 }
         }
         
         //MARK: suppresion de candidats
-        
         func deleteCandidate(at offsets: IndexSet) async {
                 let candidatesToDelete = offsets.map { self.candidates[$0] }
                 

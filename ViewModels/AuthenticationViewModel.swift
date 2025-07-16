@@ -44,7 +44,7 @@ class AuthViewModel: ObservableObject {
                         let userSession = try await authService.login(credentials: loginCredentials)
                         print("AuthenticationViewModel: Connexion réussie. Token: \(userSession.token.prefix(8))...")
                         
-                        self.onLoginSucceed(userSession) /// ici on notifie la vue parente du succès de connex
+                        onLoginSucceed(userSession) /// ici on notifie la vue parente du succès de connex
                         
                 } catch let error as APIServiceError {
                         errorMessage = error.errorDescription

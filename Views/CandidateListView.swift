@@ -32,10 +32,8 @@ struct CandidateListView: View {
         var body: some View {
                 NavigationStack {
                         VStack(spacing: 0) {
-                                
                                 List {
                                         ForEach(viewModel.candidates) { candidate in
-                                                // NavigationLink passe la "valeur" candidate
                                                 NavigationLink(value: candidate) {
                                                         HStack {
                                                                 if isEditing {
@@ -129,7 +127,7 @@ struct CandidateListView: View {
                                 .fontWeight(.semibold)
                 }
                 
-                // Le bouton "Favoris" à droite
+                // bouton "Favoris" à droite
                 ToolbarItem(placement: .topBarTrailing) {
                         Button {
                                 viewModel.isFavoritesFilterActive.toggle()
