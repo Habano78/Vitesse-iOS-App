@@ -8,18 +8,24 @@ import SwiftUI
 
 struct RegisterView: View {
         
-        // MARK: Properties
-        @StateObject private var viewModel: RegisterViewModel 
-        @FocusState private var isInputActive: Bool ///contrôler quel champ de texte est actif
+        // MARK: - Properties
+        @StateObject private var viewModel: RegisterViewModel
         
-        // MARK: Init
+        // Enumération des champs focusables
+        private enum FocusField: Hashable {
+                case firstName, lastName, email, password, confirmPassword
+        }
+        
+        @FocusState private var focusedField: FocusField?
+        
+        // MARK: - Init
         init(onRegisterSucceed: @escaping () -> Void) {
                 _viewModel = StateObject(wrappedValue: RegisterViewModel(
                         onRegisterSucceed: onRegisterSucceed
                 ))
         }
         
-        // MARK: Body
+        // MARK: - Body
         var body: some View {
                 NavigationStack {
                         ScrollView {
@@ -29,22 +35,41 @@ struct RegisterView: View {
                                                 .fontWeight(.bold)
                                                 .padding(.vertical, 20)
                                         
-                                        // Champs de saisie
                                         VStack(alignment: .leading, spacing: 15) {
-                                                createLabeledTextField(label: "First Name", placeholder: "Enter first name", text: $viewModel.firstName)
+                                                // Champ First Name
+                                                createLabeledTextField(
+                                                        label: "First Name",
+                                                        placeholder: "Enter first name",
+                                                        text: $viewModel.firstName,
+                                                        focus: .firstName
+                                                )
                                                 
-                                                createLabeledTextField(label: "Last Name", placeholder: "Enter last name", text: $viewModel.lastName)
+                                                // Champ Last Name
+                                                createLabeledTextField(
+                                                        label: "Last Name",
+                                                        placeholder: "Enter last name",
+                                                        text: $viewModel.lastName,
+                                                        focus: .lastName
+                                                )
                                                 
-                                                // Champ Email avec sa validation
+                                                // Champ Email
                                                 VStack(alignment: .leading) {
-                                                        Text("Email").font(.footnote).foregroundColor(.gray)
+                                                        Text("Email")
+                                                                .font(.footnote)
+                                                                .foregroundColor(.gray)
                                                         TextField("Enter email", text: $viewModel.email)
                                                                 .keyboardType(.emailAddress)
                                                                 .autocapitalization(.none)
                                                                 .disableAutocorrection(true)
                                                                 .modifier(StandardTextFieldModifier())
-                                                                .focused($isInputActive)
-                                                                .onChange(of: viewModel.email) { viewModel.validateEmail() }
+                                                                .focused($focusedField, equals: .email)
+                                                                .onChange(of: viewModel.email) {
+                                                                        viewModel.validateEmail()
+                                                                }
+                                                                .submitLabel(.next)
+                                                                .onSubmit {
+                                                                        focusedField = .password
+                                                                }
                                                         
                                                         if let emailError = viewModel.emailErrorMessage {
                                                                 Text(emailError)
@@ -54,9 +79,21 @@ struct RegisterView: View {
                                                         }
                                                 }
                                                 
-                                                createLabeledSecureField(label: "Password", placeholder: "Enter password", text: $viewModel.password)
+                                                // Champ Password
+                                                createLabeledSecureField(
+                                                        label: "Password",
+                                                        placeholder: "Enter password",
+                                                        text: $viewModel.password,
+                                                        focus: .password
+                                                )
                                                 
-                                                createLabeledSecureField(label: "Confirm Password", placeholder: "Confirm password", text: $viewModel.confirmPassword)
+                                                // Champ Confirm Password
+                                                createLabeledSecureField(
+                                                        label: "Confirm Password",
+                                                        placeholder: "Confirm password",
+                                                        text: $viewModel.confirmPassword,
+                                                        focus: .confirmPassword
+                                                )
                                         }
                                         .padding(.top, 40)
                                         .padding(.horizontal, 40)
@@ -76,6 +113,7 @@ struct RegisterView: View {
                                                         .padding(.top, 20)
                                         } else {
                                                 Button("Create") {
+                                                        focusedField = nil // ferme le clavier
                                                         Task { await viewModel.register() }
                                                 }
                                                 .padding(.vertical, 12)
@@ -91,32 +129,59 @@ struct RegisterView: View {
                                 }
                         }
                         .navigationBarHidden(true)
-                        .onTapGesture { isInputActive = false }
+                        .onAppear {
+                            focusedField = .firstName /// focalise automatiquement le premier champ du formulaire
+                        }
+                        .onTapGesture {
+                                focusedField = nil /// Ferme le clavier si on tape à côté
+                        }
                 }
         }
         
-        // MARK: Fonctions assistantes
-        /// Crée un champ de texte standard avec un label.
-        private func createLabeledTextField(label: String, placeholder: String, text: Binding<String>) -> some View {
+        // MARK: Helper TextField
+        private func createLabeledTextField(label: String, placeholder: String, text: Binding<String>, focus: FocusField) -> some View {
                 VStack(alignment: .leading) {
                         Text(label)
                                 .font(.footnote)
                                 .foregroundColor(.gray)
                         TextField(placeholder, text: text)
                                 .modifier(StandardTextFieldModifier())
-                                .focused($isInputActive)
+                                .focused($focusedField, equals: focus)
+                                .submitLabel(.next)
+                                .onSubmit {
+                                        focusNext(after: focus)
+                                }
                 }
         }
         
-        /// Crée un champ de texte sécurisé standard avec un label.
-        private func createLabeledSecureField(label: String, placeholder: String, text: Binding<String>) -> some View {
+        private func createLabeledSecureField(label: String, placeholder: String, text: Binding<String>, focus: FocusField) -> some View {
                 VStack(alignment: .leading) {
                         Text(label)
                                 .font(.footnote)
                                 .foregroundColor(.gray)
                         SecureField(placeholder, text: text)
                                 .modifier(StandardTextFieldModifier())
-                                .focused($isInputActive)
+                                .focused($focusedField, equals: focus)
+                                .submitLabel(focus == .confirmPassword ? .done : .next)
+                                .onSubmit {
+                                        focusNext(after: focus)
+                                }
+                }
+        }
+        
+        // MARK: Navigation logique entre les champs
+        private func focusNext(after current: FocusField) {
+                switch current {
+                case .firstName:
+                        focusedField = .lastName
+                case .lastName:
+                        focusedField = .email
+                case .email:
+                        focusedField = .password
+                case .password:
+                        focusedField = .confirmPassword
+                case .confirmPassword:
+                        focusedField = nil // Ferme le clavier
                 }
         }
 }

@@ -10,7 +10,7 @@ import Foundation
 
 // Notre fausse classe URLSession qui nous donne un contrôle total sur les réponses réseau.
 // Elle doit être `@unchecked Sendable` pour être utilisée par le framework `Testing`.
-// MARK: - Infrastructure de Mock (Légèrement améliorée)
+// MARK: Infrastructure de Mock
 
 class MockURLSession: @unchecked Sendable, URLSessionProtocol {
         var dataToReturn: Data?

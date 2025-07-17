@@ -19,13 +19,11 @@ struct CandidateListView: View {
         
         // Propriétés reçues de la vue parente
         let isAdmin: Bool
-        let onLogout: () -> Void
         
         
         // MARK: Init
-        init(isAdmin: Bool, onLogout: @escaping () -> Void) {
+        init(isAdmin: Bool) {
                 self.isAdmin = isAdmin
-                self.onLogout = onLogout
         }
         
         // MARK: Body
@@ -66,12 +64,6 @@ struct CandidateListView: View {
                                                 CandidateDetailView(candidate: candidate, isAdmin: isAdmin)
                                         }
                                 }
-                                
-                                // Bouton de déconnexion en bas de l'écran
-                                Button("Logout", role: .destructive) {
-                                        onLogout()
-                                }
-                                .padding()
                         }
                         .navigationTitle("")
                         .navigationDestination(item: $candidateToNavigate) { candidate in

@@ -18,7 +18,6 @@ struct CandidateDetailView: View {
         // MARK: Initialization
         init(candidate: Candidate, isAdmin: Bool) {
                 self.isAdmin = isAdmin
-                // On initialise le StateObject ici, en lui passant les données nécessaires.
                 _viewModel = StateObject(wrappedValue: CandidateDetailViewModel(
                         candidate: candidate,
                         isAdmin: isAdmin

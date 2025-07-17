@@ -39,7 +39,7 @@ struct VitesseApp: App {
         var body: some Scene {
                 WindowGroup {
                         if isAuthenticated {
-                                CandidateListView(isAdmin: isAdmin, onLogout: logout)
+                                CandidateListView(isAdmin: isAdmin)
                         } else {
                                 AuthView(
                                         authService: AuthService(),
@@ -60,16 +60,5 @@ struct VitesseApp: App {
                 } catch {
                         print("ERREUR: Impossible de sauvegarder le token. Erreur: \(error.localizedDescription)")
                 }
-        }
-        
-        /// Gère la déconnexion de l'utilisateur en effaçant le token et en réinitialisant l'état de l'UI.
-        private func logout() {
-                do {
-                        try tokenManager.deleteToken()
-                } catch {
-                        print("Erreur lors de la suppression du token: \(error.localizedDescription)")
-                }
-                self.isAuthenticated = false
-                self.isAdmin = false
         }
 }

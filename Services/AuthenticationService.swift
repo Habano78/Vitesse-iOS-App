@@ -7,16 +7,6 @@
 
 import Foundation
 
-// MARK: Authentication Service Protocol
-protocol AuthenticationServiceProtocol {
-        @MainActor
-        func login(credentials: AuthRequestDTO) async throws -> AuthResponseDTO
-        
-        @MainActor
-        func register(with details: UserRegisterRequestDTO) async throws
-}
-
-
 // MARK: Implementation
 class AuthService: APIService, AuthenticationServiceProtocol {
         

@@ -7,23 +7,6 @@
 
 import Foundation
 
-//MARK: définition du protocol pour récuperer des candidats
-protocol CandidateServiceProtocol {
-        @MainActor
-        func fetchCandidates() async throws -> [CandidateResponseDTO]
-        
-        @MainActor
-        func deleteCandidate(id candidateID: UUID) async throws -> Void
-        
-        @MainActor
-        func toggleFavoriteStatus(id candidateID: UUID) async throws -> CandidateResponseDTO
-        
-        @MainActor
-        func updateCandidate(id candidateID: UUID, with payload: CandidatePayloadDTO) async throws -> CandidateResponseDTO
-        
-        @MainActor
-        func createCandidate(with payload: CandidatePayloadDTO) async throws -> CandidateResponseDTO
-}
 
 //MARK: Implémentation des contrats
 class CandidateService: APIService, CandidateServiceProtocol {
