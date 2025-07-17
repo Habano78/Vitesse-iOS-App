@@ -138,7 +138,7 @@ struct CandidateListView: View {
                 }
         }
         
-        /// Barre d'outils pour le mode d'édition.
+        // Barre d'outils pour le mode d'édition.
         @ToolbarContentBuilder
         private var editingToolbar: some ToolbarContent {
                 ToolbarItem(placement: .topBarLeading) {

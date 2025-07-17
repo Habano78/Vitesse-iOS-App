@@ -78,8 +78,8 @@ struct RegisterView: View {
                                                 Button("Create") {
                                                         Task { await viewModel.register() }
                                                 }
-                                                .padding(.vertical, 12) // Padding vertical pour la hauteur
-                                                .padding(.horizontal, 50) // Padding horizontal pour la largeur
+                                                .padding(.vertical, 12)
+                                                .padding(.horizontal, 50)
                                                 .background(
                                                         RoundedRectangle(cornerRadius: 10)
                                                                 .stroke(Color.black, lineWidth: 1.5)
@@ -119,13 +119,4 @@ struct RegisterView: View {
                                 .focused($isInputActive)
                 }
         }
-}
-
-// MARK: - Preview
-
-#Preview {
-        RegisterView(onRegisterSucceed: {
-                print("Registration would succeed.")
-        })
-        .background(Color(.systemGroupedBackground))
 }

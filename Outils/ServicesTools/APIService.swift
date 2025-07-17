@@ -4,7 +4,7 @@
 //
 //  Created by Perez William on 06/07/2025.
 
-//  Cette classe contient les dépendances partagées et la logique d'appel générique.
+//  Classe contenant les dépendances partagées et la logique d'appel générique.
 
 import Foundation
 

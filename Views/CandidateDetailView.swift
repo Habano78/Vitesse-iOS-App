@@ -113,7 +113,7 @@ struct CandidateDetailView: View {
                 }
         }
         
-        /// Vue affichée en mode édition, utilisant un Form pour une saisie facile.
+        /// Vue affichée en mode édition, utilisant un Form car conçu pour la saisie d'informations
         private var editableCandidateView: some View {
                 Form {
                         Section("Informations Personnelles") {
@@ -148,7 +148,7 @@ struct CandidateDetailView: View {
                 .listStyle(.insetGrouped)
         }
         
-        // MARK: - Toolbar Content
+        // MARK: Toolbar Content
         
         /// Barre d'outils pour le mode lecture.
         @ToolbarContentBuilder
@@ -176,27 +176,5 @@ struct CandidateDetailView: View {
                                         .disabled(viewModel.emailErrorMessage != nil || viewModel.phoneErrorMessage != nil)
                         }
                 }
-        }
-}
-
-// MARK: - Preview
-
-#Preview {
-        NavigationStack {
-                CandidateDetailView(
-                        candidate: Candidate(
-                                from: .init(
-                                        id: UUID(),
-                                        firstName: "Marie",
-                                        lastName: "Curie",
-                                        email: "marie@curie.fr",
-                                        phone: "0123456789",
-                                        note: "Physicienne et chimiste, pionnière dans le domaine de la radioactivité.",
-                                        linkedinURL: "https://linkedin.com/in/mariecurie",
-                                        isFavorite: true
-                                )
-                        ),
-                        isAdmin: true
-                )
         }
 }

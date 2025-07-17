@@ -46,23 +46,23 @@ class CandidateListViewModel: ObservableObject {
         
         //MARK: Actions
         func fetchCandidates() async {
-                self.isLoading = true
+                isLoading = true
                 defer {self.isLoading = false}
-                self.errorMessage = nil
+                errorMessage = nil
                 
                 do {
                         // Appel au service pour récupérer les DTOs
                         let candidateDTOs = try await candidateService.fetchCandidates()
                         
                         // Transformer ("mapper") le tableau de DTObs en tableau de modèles métier
-                        self.allCandidates = candidateDTOs.map { dto in
+                        allCandidates = candidateDTOs.map { dto in
                                 Candidate(from: dto)
                         }
                         
                 } catch let error as APIServiceError {
-                        self.errorMessage = error.localizedDescription
+                        errorMessage = error.localizedDescription
                 } catch {
-                        self.errorMessage = "Une erreur inattendue est survenue."
+                        errorMessage = "Une erreur inattendue est survenue."
                 }
         }
         
@@ -71,7 +71,7 @@ class CandidateListViewModel: ObservableObject {
                 let candidatesToDelete = offsets.map { self.candidates[$0] }
                 
                 let idsToDelete = Set(candidatesToDelete.map { $0.id })
-                self.allCandidates.removeAll { idsToDelete.contains($0.id) }
+                allCandidates.removeAll { idsToDelete.contains($0.id) }
                 
                 var deletionErrors: [Error] = []
                 
@@ -97,7 +97,7 @@ class CandidateListViewModel: ObservableObject {
                 if !deletionErrors.isEmpty {
                         // On construit le message que le test attend
                         let failedNames = candidatesToDelete.map { $0.firstName }.joined(separator: ", ")
-                        self.errorMessage = "La suppression de \(failedNames) a échoué"
+                        errorMessage = "La suppression de \(failedNames) a échoué"
                 }
         }
         
@@ -129,7 +129,7 @@ class CandidateListViewModel: ObservableObject {
                 }
                 
                 if !deletionErrors.isEmpty {
-                        self.errorMessage = "La suppression d'au moins un candidat a échoué. Veuillez rafraîchir."
+                        errorMessage = "La suppression d'au moins un candidat a échoué. Veuillez rafraîchir."
                 }
         }
 }

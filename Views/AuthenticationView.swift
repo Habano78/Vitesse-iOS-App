@@ -10,9 +10,9 @@ import Foundation
 
 struct AuthView: View {
         
-        // MARK: - Properties
+        // MARK: Properties
         @StateObject private var viewModel: AuthViewModel
-        @FocusState private var focusedField: AuthField? // On utilise une enum pour le focus
+        @FocusState private var focusedField: AuthField? 
         @State private var isShowingRegisterView = false
         
         // Enum pour gérer le focus entre les champs
@@ -21,7 +21,7 @@ struct AuthView: View {
                 case password
         }
         
-        // MARK: - Initialization
+        // MARK: Initialization
         init(authService: AuthenticationServiceProtocol, onLoginSucceed: @escaping (AuthResponseDTO) -> Void) {
                 _viewModel = StateObject(wrappedValue: AuthViewModel(
                         authService: authService,
